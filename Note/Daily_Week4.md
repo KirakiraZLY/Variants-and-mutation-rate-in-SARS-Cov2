@@ -25,12 +25,16 @@ To get all the variants with AA Substitutions == "Spike_E484Q"
 ***So what are the major differences between Omicron and previous variants?***   
 Guess: E484Q's dissappear?
    
-Computing the slope  
+**Computing the slope**  
 Using linear regression:<center> $y=WX+b$</center>    
 Find out that:   
 - For VOC Alpha GRY,  the slope is: 1.087e-02
 - For VOC Delta GK,   the slope is: 1.289e-02
-- For VOC Omicron GRA,the slope is: 4.326e-02  
-
+- For VOC Omicron GRA,the slope is: 4.326e-02
    
+
+**GC Content**    
+It shows that the stability of RNA of different variants are not changed significantly, so the different mutation rate would come from other reasons.
+![GCContent](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/GCContent.png?raw=true)   
+
 🐰
