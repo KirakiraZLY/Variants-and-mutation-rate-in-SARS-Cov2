@@ -25,7 +25,8 @@ To get all the variants with AA Substitutions == "Spike_E484Q"
 ***So what are the major differences between Omicron and previous variants?***   
 Guess: E484Q's dissappear?
    
-Computing the slope   
+Computing the slope  
+Using linear regression:<center> $y=WX+b$</center>    
 Find out that:   
 - For VOC Alpha GRY,  the slope is: 1.087e-02
 - For VOC Delta GK,   the slope is: 1.289e-02
