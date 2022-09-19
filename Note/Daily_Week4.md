@@ -22,7 +22,8 @@ In CDC article, VOC are dragged to be:
 To get all the variants with AA Substitutions == "Spike_E484Q"
 ![E484Q](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Spike_E484Q_Synonmous.png?raw=true)   
 **It's interesting that E484Q only appeared from 2021-1 to 2022-1, before Omicron.**   
-***So what are the differences between Omicron and previous variants?***   
+***So what are the major differences between Omicron and previous variants?***   
+Guess: E484Q's dissappear?
    
 Computing the slope   
 Find out that:   
