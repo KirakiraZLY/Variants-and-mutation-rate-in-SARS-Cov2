@@ -7,8 +7,8 @@ Num of different types of variants
 VOC   
 ![VOC](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/VOC.png?raw=true)
 ## Week 4
--[x] count_S synonmous   
--[x] AA substitution
+- [x] count_S synonmous   
+- [x] AA substitution
 ### 2022.9.18
 By checking the plot below, I found that most significant VOC skal vare:   
 **VOC Alpha GRY, VOC Delta GK, VOC Omicron GRA.**  
