@@ -10,7 +10,7 @@ VOC
 -[x] count_S synonmous   
 -[x] AA substitution
 ### 2022.9.18
-By 6.synonmous based on !annotated, I found that most significant VOC skal vare:   
+By checking the plot below, I found that most significant VOC skal vare:   
 **VOC Alpha GRY, VOC Delta GK, VOC Omicron GRA.**  
 
 P.S. Before 2021.6, there were many variants had no identified name, so all were NA.   
