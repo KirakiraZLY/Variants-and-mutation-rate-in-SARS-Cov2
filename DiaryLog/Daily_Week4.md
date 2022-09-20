@@ -35,7 +35,8 @@ Find out that:
 By making plot, we can see that: 
 ![mutationRate](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/MutationRateOfDifferentVariants.png?raw=true)   
 It shows that, most variants have positive slope of mutation, meaning the mutation numbers are increasing. And Omicron is more significant, that it has a higher slope, showing that the mutating speed of Omicron is the fastest.   
-*While some even have decreasing mutation numbers? Hvorfor?*
+*While some even have decreasing mutation numbers? Hvorfor?*   
+I firstly guessed it would be that something wrong in data collecting, but it doesn't make sense to wrong for so many data.
    
 **GC Content**    
 It shows that the stability of RNA of different variants are not changed significantly,    
