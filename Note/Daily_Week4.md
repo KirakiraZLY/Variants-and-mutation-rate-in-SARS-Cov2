@@ -23,7 +23,7 @@ To get all the variants with AA Substitutions == "Spike_E484Q"
 ![E484Q](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Spike_E484Q_Synonmous.png?raw=true)   
 **It's interesting that E484Q only appeared from 2021-1 to 2022-1, before Omicron.**   
 ***So what are the major differences between Omicron and previous variants?***   
-Guess: E484Q's dissappear is correlated to the advantage of Omicron, or to the escaping from immunity?
+*Guess: E484Q's dissappear is correlated to the advantage of Omicron, or to the escaping from immunity?*
    
 **Computing the slope**  
 Using linear regression:<center> $y=WX+b$</center>    
@@ -33,10 +33,13 @@ Find out that:
 - For VOC Omicron GRA,the slope is: 4.326e-02
    
 By making plot, we can see that: 
-![mutationRate](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/MutationRateOfDifferentVariants.png?raw=true)    
+![mutationRate](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/MutationRateOfDifferentVariants.png?raw=true)   
+It shows that, most variants have positive slope of mutation, meaning the mutation numbers are increasing. And Omicron is more significant, that it has a higher slope, showing that the mutating speed of Omicron is the fastest.   
+*While some even have decreasing mutation numbers? Hvorfor?*
    
 **GC Content**    
-It shows that the stability of RNA of different variants are not changed significantly, so the different mutation rate would come from other reasons.
+It shows that the stability of RNA of different variants are not changed significantly,    
+*so the different mutation rate would come from other reasons.*
 ![GCContent](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/GCContent.png?raw=true)   
 
 🐰
