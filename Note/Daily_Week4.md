@@ -1,4 +1,4 @@
-# Project in Bioinfo Note
+# Note for Project in Bioinfo, Week 4
 ### Zhang Leyi
 
 ## Some previous works   
@@ -32,7 +32,9 @@ Find out that:
 - For VOC Delta GK,   the slope is: 1.289e-02
 - For VOC Omicron GRA,the slope is: 4.326e-02
    
-
+By making plot, we can see that: 
+![mutationRate](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/MutationRateOfDifferentVariants.png?raw=true)    
+   
 **GC Content**    
 It shows that the stability of RNA of different variants are not changed significantly, so the different mutation rate would come from other reasons.
 ![GCContent](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/GCContent.png?raw=true)   
