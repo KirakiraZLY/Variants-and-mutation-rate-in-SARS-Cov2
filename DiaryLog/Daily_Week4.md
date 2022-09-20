@@ -9,6 +9,7 @@ VOC
 ## Week 4
 - [x] count_S synonmous   
 - [x] AA substitution
+- [ ] L452R, F486V, R493Q
 ### 2022.9.18
 By checking the plot below, I found that most significant VOC skal vare:   
 **VOC Alpha GRY, VOC Delta GK, VOC Omicron GRA.**  
