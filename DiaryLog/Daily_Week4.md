@@ -1,5 +1,5 @@
 # Note for Project in Bioinfo, Week 4
-### 张乐艺Zhang Leyi
+### 张乐艺 Zhang Leyi
 
 ## Some previous works   
 Num of different types of variants   
