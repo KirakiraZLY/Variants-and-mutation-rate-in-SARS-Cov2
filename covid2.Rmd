@@ -35,7 +35,7 @@ ggplot(data = covid, mapping = aes(x = position)) +
 ```{r}
 
 covid3 <- covid %>%
-  filter(effect == "synonymous_variant", gene == "ORF1ab")
+  filter(effect == "missense_variant", gene == "S")
 
 ggplot(data = covid3, mapping = aes(x = position)) +
   geom_histogram()
@@ -49,15 +49,33 @@ covid4 <- merge(covid_ann_sub,covid_snp_sub,by = "id")
 
 ```{r}
 covid5 <- covid4 %>%
-  filter(aa_change == "F924F")
+  filter(aa_change == "T478K")
 ggplot(data = covid5, mapping = aes(x = date)) +
-  geom_histogram()
+  geom_histogram() +
+  labs(title = "T478K")
 ```
 
 ```{r}
 tb1 <- table(covid5$date)
 tb2 <- table(covid_2$date)
+tb1 <- data.frame(tb1)
+tb2 <- data.frame(tb2)
+names(tb1) <- c("date","num1_T478K")
+names(tb2) <- c("date","num2")
+# tb2.columns <- ['date','num2']
+```
 
 
+```{r}
+covid6 <- merge(tb1,tb2,by = "date")
+covid6["Freq"] <- covid6$num1_T478K / covid6$num2
+
+```
+
+```{r}
+ggplot(data = covid6, mapping = aes(x = date, y = Freq)) +
+  geom_point() +
+  labs(title = "T478K")
+  
 ```
 
