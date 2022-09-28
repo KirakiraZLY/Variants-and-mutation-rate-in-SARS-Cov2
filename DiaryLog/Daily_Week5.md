@@ -7,3 +7,8 @@ Checking Num of guanine variaty
 
 Checking # of position of Syn & gene == "S"  
 ![syn_S](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Syn_Var_position.png?raw=true)
+
+T478K number detected:   
+![T478K_hist](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/T478K_hist.png?raw=true)
+T478K frequency by time:
+![T478K](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/T478K.png?raw=true)
