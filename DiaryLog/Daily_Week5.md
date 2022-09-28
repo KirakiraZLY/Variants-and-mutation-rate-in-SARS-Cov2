@@ -23,3 +23,4 @@ L452R has experienced the peak twice, in Delta and in Omicron time.
 
 Effect and Impact are one-to-one correspondence, but why?
 ![Effect-Impact](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/effect_impact.png?raw=true)
+![T723T_Q474Q](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/T723T_Q474Q.png?raw=true)
