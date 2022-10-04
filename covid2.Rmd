@@ -6,17 +6,23 @@ library(tidyverse)
 library(data.table)
 library(DBI)
 library(RSQLite)
+```
 
+
+```{r}
 filename <- file.choose()
 covid <- readRDS(filename)
+## 多的那个
 ```
 
 
 ```{r}
 filename <- file.choose()
 covid_2<- readRDS(filename)
+## 少的那个
 ```
 
+Week 5
 ```{r}
 covid %>% filter(gene == "S") %>% count(aa_change) %>% arrange(-n)
 ```
@@ -35,10 +41,12 @@ ggplot(data = covid, mapping = aes(x = position)) +
 ```{r}
 
 covid3 <- covid %>%
-  filter(effect == "missense_variant", gene == "S")
+  filter(effect == "missense_variant")
 
 ggplot(data = covid3, mapping = aes(x = position)) +
   geom_histogram()
+
+unique(covid3$impact)
 ```
 
 ```{r}
@@ -49,10 +57,10 @@ covid4 <- merge(covid_ann_sub,covid_snp_sub,by = "id")
 
 ```{r}
 covid5 <- covid4 %>%
-  filter(aa_change == "T478K")
+  filter(aa_change == "E484Q")
 ggplot(data = covid5, mapping = aes(x = date)) +
   geom_histogram() +
-  labs(title = "T478K")
+  labs(title = "E484Q")
 ```
 
 ```{r}
@@ -60,7 +68,7 @@ tb1 <- table(covid5$date)
 tb2 <- table(covid_2$date)
 tb1 <- data.frame(tb1)
 tb2 <- data.frame(tb2)
-names(tb1) <- c("date","num1_T478K")
+names(tb1) <- c("date","num1_E484Q")
 names(tb2) <- c("date","num2")
 # tb2.columns <- ['date','num2']
 ```
@@ -68,14 +76,51 @@ names(tb2) <- c("date","num2")
 
 ```{r}
 covid6 <- merge(tb1,tb2,by = "date")
-covid6["Freq"] <- covid6$num1_T478K / covid6$num2
+covid6["Freq"] <- covid6$num1_E484Q / covid6$num2
 
 ```
 
 ```{r}
 ggplot(data = covid6, mapping = aes(x = date, y = Freq)) +
   geom_point() +
-  labs(title = "T478K")
+  labs(title = "E484Q")
   
+```
+
+```{r}
+# covid3 <- covid3[covid3$aa_change == c("Q474Q","T723T"),]
+ggplot(data = covid3, mapping = aes(x = aa_change, fill = impact)) +
+  geom_bar()
+
+```
+
+Week 6
+
+```{r}
+# covid_snp_sub <- covid_2[,c("id","date","VarShort")] 
+# covid_ann_sub <- covid3[,c("id","position","aa_change")]
+# covid4 <- merge(covid_ann_sub,covid_snp_sub,by = "id")
+
+covid %>% count(effect) %>% arrange(-n)
+```
+## Missense and Syn distribution7
+```{r}
+covid_snp_sub_2 <- covid_2[,c("id","date","VarShort")]
+covid_ann_sub_2 <- covid[,c("id","effect")] %>%
+  filter(effect == "missense_variant" | effect == "synonymous_variant")
+```
+
+```{r}
+covid7 <- merge(covid_ann_sub_2,covid_snp_sub_2,by = "id", all = T)
+
+```
+
+```{r}
+Num_mis <- aggregate(covid7$effect == "missense_variant", by = list(date = covid7$date), FUN = sum)
+barplot(Num_mis)
+```
+```{r}
+Num_syn<- tapply(covid7$effect == "synonymous_variant", covid7$date, sum)
+barplot(Num_syn)
 ```
 
