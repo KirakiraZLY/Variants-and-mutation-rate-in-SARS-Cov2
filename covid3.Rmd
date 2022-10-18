@@ -1,0 +1,90 @@
+---
+title: "Covid_3"
+author: "zly"
+date: "2022-10-18"
+output: html_document
+---
+
+```{r}
+library(rehh)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(data.table)
+library(DBI)
+library(RSQLite)
+```
+
+```{r}
+filename <- file.choose()
+covid <- readRDS(filename)
+## 多的那个
+```
+
+
+```{r}
+filename <- file.choose()
+covid_2<- readRDS(filename)
+## 少的那个
+covid_2 <- covid_2 %>%  filter(grepl(pattern = 'Spike', AASubstitutions))
+# colnames(covid_2)[names(covid_2) == 'GC-Content'] <- "GCContent"
+# saveRDS(covid_2, file = filename)
+```
+
+```{r}
+
+covid3 <- covid %>%
+  filter(effect == "missense_variant")
+covid_snp_sub <- covid_2[,c("id","date","VarShort","pangolin_lineage")] 
+covid_ann_sub <- covid3[,c("id","position","aa_change")]
+covid3 <- merge(covid_ann_sub,covid_snp_sub,by = "id")
+
+# covid5 <- covid3 %>%
+#   filter(aa_change == "K356T")
+# # covid5 <- covid5[covid5$pangolin_lineage == c("BA.1","BA.2","BA.2.12.1","BA.5"),]
+# # covid5 <- covid5[covid5$VarShort == c("VOC Omicron GRA", "VOC Alpha GRY", "VOC Delta GK", "VOC Beta GH"),]
+# ggplot(data = covid5, mapping = aes(x = date, col = pangolin_lineage)) +
+#   geom_histogram() +
+#   labs(title = "K356T")
+```
+
+Finding relative growth advantage between BA.5 and BA.2
+```{r}
+covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.5"),]
+covid3_ba2 <- covid3[covid3$pangolin_lineage == c("BA.2"),]
+```
+
+
+```{r}
+covid3_ba5 %>% filter(aa_change == "K356T")
+tb1 <- table(covid3_ba5$date)
+tb2 <- table(covid_2$date)
+tb1 <- data.frame(tb1)
+tb2 <- data.frame(tb2)
+names(tb1) <- c("date","num1_K356T")
+names(tb2) <- c("date","num2")
+covid4_ba5 <- merge(tb1,tb2,by = "date")
+covid4_ba5["Freq"] <- covid4_ba5$num1_K356T / covid4_ba5$num2
+ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
+  geom_point() +
+  labs(title = "K356T, BA.5") +
+  scale_x_discrete(" ")
+
+```
+
+```{r}
+covid3_ba2 %>% filter(aa_change == "K356T")
+tb1 <- table(covid3_ba2$date)
+tb2 <- table(covid_2$date)
+tb1 <- data.frame(tb1)
+tb2 <- data.frame(tb2)
+names(tb1) <- c("date","num1_K356T")
+names(tb2) <- c("date","num2")
+covid4_ba2 <- merge(tb1,tb2,by = "date")
+covid4_ba2["Freq"] <- covid4_ba2$num1_K356T / covid4_ba2$num2
+ggplot(data = covid4_ba2, mapping = aes(x = date, y = Freq)) +
+  geom_point() +
+  labs(title = "K356T, BA.2") +
+  scale_x_discrete(" ")
+```
+
