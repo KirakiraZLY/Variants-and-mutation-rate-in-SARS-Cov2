@@ -56,35 +56,35 @@ covid3_ba2 <- covid3[covid3$pangolin_lineage == c("BA.4"),]
 
 
 ```{r}
-covid3_ba5 %>% filter(aa_change == "L452R")
+covid3_ba5 %>% filter(aa_change == "R493Q")
 tb1 <- table(covid3_ba5$date)
 tb2 <- table(covid_2$date)
 tb1 <- data.frame(tb1)
 tb2 <- data.frame(tb2)
-names(tb1) <- c("date","num1_L452R")
+names(tb1) <- c("date","num1_R493Q")
 names(tb2) <- c("date","num2")
 covid4_ba5 <- merge(tb1,tb2,by = "date")
-covid4_ba5["Freq"] <- covid4_ba5$num1_L452R / covid4_ba5$num2
+covid4_ba5["Freq"] <- covid4_ba5$num1_R493Q / covid4_ba5$num2
 ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
   geom_point() +
-  labs(title = "L452R, BA.5") +
+  labs(title = "R493Q, BA.5") +
   scale_x_discrete(" ")
 
-```
-
-```{r}
-covid3_ba2 %>% filter(aa_change == "L452R")
+covid3_ba2 %>% filter(aa_change == "R493Q")
 tb1 <- table(covid3_ba2$date)
 tb2 <- table(covid_2$date)
 tb1 <- data.frame(tb1)
 tb2 <- data.frame(tb2)
-names(tb1) <- c("date","num1_L452R")
+names(tb1) <- c("date","num1_R493Q")
 names(tb2) <- c("date","num2")
 covid4_ba2 <- merge(tb1,tb2,by = "date")
-covid4_ba2["Freq"] <- covid4_ba2$num1_L452R / covid4_ba2$num2
+covid4_ba2["Freq"] <- covid4_ba2$num1_R493Q / covid4_ba2$num2
 ggplot(data = covid4_ba2, mapping = aes(x = date, y = Freq)) +
   geom_point() +
-  labs(title = "L452R, BA.4") +
+  labs(title = "R493Q, BA.4") +
   scale_x_discrete(" ")
+
 ```
+
+
 
