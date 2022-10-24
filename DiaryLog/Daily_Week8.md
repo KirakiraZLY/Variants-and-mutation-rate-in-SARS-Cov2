@@ -29,4 +29,16 @@ BA.2.12 from India, BA.2.12.1 from Canada.
 Spike mutations L452Q and S704L are from antigenic drift, which are hard to accumulate. **But in only a month(Feb 2022), 2 mutations are accumulated.**   
 S704L also shows convergency, that BA.1, BA.2, BA.5 all have **S704L change**. And BA.1 + S704L has growth advantage than BA.1
 ## 4. L452R
+![L452R Delta](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/L452R/L452R_Delta.png?raw=true)
 
+![L452R BA.1](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/L452R/L452R_BA1.png?raw=true)
+
+![L452R BA.2](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/L452R/L452R_BA2.png?raw=true)
+
+L452R BA.2.12 doesn't have.   
+
+![L452R BA.2.12.1](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/L452R/L452R_BA2.12.1.png?raw=true)
+
+![L452R BA.4](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/L452R/L452R_BA4.png?raw=true)
+
+![L452R BA.5](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/L452R/L452R_BA5.png?raw=true)
