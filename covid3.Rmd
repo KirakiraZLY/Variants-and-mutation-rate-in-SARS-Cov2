@@ -133,7 +133,7 @@ covid3_delta <- covid3[covid3$VarShort == c("VOC Delta GK"),]
 
 ```{r}
 
-covid3_ba5 %>% filter(aa_change == "L452Q")
+covid3_ba5 %>% filter(aa_change == "R346")
 tb1 <- table(covid3_ba5$date)
 tb2 <- table(covid_2$date)
 tb1 <- data.frame(tb1)
@@ -176,5 +176,11 @@ ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
   geom_point() +
   labs(title = "S704L, BA.5") +
   scale_x_discrete(" ")
+```
+
+2. BF.7 and BA.5
+```{r}
+covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.5"),]
+covid3_ba2 <- covid3[covid3$pangolin_lineage == c("BF.5"),]
 ```
 
