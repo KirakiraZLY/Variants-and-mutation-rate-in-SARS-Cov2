@@ -203,7 +203,7 @@ ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
 covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.5"),]
 # covid3_ba2 <- covid3[covid3$pangolin_lineage == c("BF.5"),]
 
-covid3_ba5 <- covid3_ba5 %>% filter(aa_change == "L452R")
+covid3_ba5 <- covid3_ba5 %>% filter(aa_change == "P4715L")
 tb1 <- table(covid3_ba5$date)
 tb2 <- table(covid_2$date)
 tb1 <- data.frame(tb1)
@@ -214,7 +214,47 @@ covid4_ba5 <- merge(tb1,tb2,by = "date")
 covid4_ba5["Freq"] <- covid4_ba5$num1 / covid4_ba5$num2
 ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
   geom_point() +
-  labs(title = "L452R, BA.5") +
+  labs(title = "P4715L, BA.5") +
+  scale_x_discrete(" ")
+```
+```{r}
+covid3_delta <- covid3[covid3$VarShort == c("VOC Delta GK"),]
+covid3_delta <- covid3_delta %>% filter(aa_change == "D614G")
+tb1 <- table(covid3_delta$date)
+tb2 <- table(covid_2$date)
+tb1 <- data.frame(tb1)
+tb2 <- data.frame(tb2)
+names(tb1) <- c("date","num1")
+names(tb2) <- c("date","num2")
+covid4_delta <- merge(tb1,tb2,by = "date")
+covid4_delta["Freq"] <- covid4_delta$num1 / covid4_delta$num2
+ggplot(data = covid4_delta, mapping = aes(x = date, y = Freq)) +
+  geom_point() +
+  labs(title = "D614G, Delta") +
+  scale_x_discrete(" ")
+```
+
+4. BA.5.2.1 -> BF.7
+```{r}
+covid3_ba5 %>% count(aa_change) %>% arrange(-n)
+```
+
+```{r}
+covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.5.2.1"),]
+# covid3_ba2 <- covid3[covid3$pangolin_lineage == c("BF.5"),]
+
+covid3_ba5 <- covid3_ba5 %>% filter(aa_change == "D614G")
+tb1 <- table(covid3_ba5$date)
+tb2 <- table(covid_2$date)
+tb1 <- data.frame(tb1)
+tb2 <- data.frame(tb2)
+names(tb1) <- c("date","num1")
+names(tb2) <- c("date","num2")
+covid4_ba5 <- merge(tb1,tb2,by = "date")
+covid4_ba5["Freq"] <- covid4_ba5$num1 / covid4_ba5$num2
+ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
+  geom_point() +
+  labs(title = "D614G, BA.5.2.1") +
   scale_x_discrete(" ")
 ```
 
