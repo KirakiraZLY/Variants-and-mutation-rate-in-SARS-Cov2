@@ -1,7 +1,7 @@
 # Week 8
 
 ## 1. Checking S704L and L452 of Omicron and Delta   
-![S704L Delta](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/S704L_Delta.png?raw=true)
+![S704L Delta](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/S704L/S704L_Delta.png?raw=true)
 
 ![S704L BA.1](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/S704L/S704L_BA.1.png?raw=true)
 
