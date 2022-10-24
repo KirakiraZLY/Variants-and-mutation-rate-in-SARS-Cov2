@@ -43,5 +43,16 @@ L452R BA.2.12 doesn't have.
 
 ![L452R BA.5](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/L452R/L452R_BA5.png?raw=true)
 
-# BA.5.2.1
-![P4715L BA.5.2.1]()
+## 5. BA.5.2.1
+![P4715L BA.5.2.1](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/BA.5.2.1/P4715L.png?raw=true)
+
+![P4715L BA.5](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/BA.5.2.1/P4715L_BA5.png?raw=true)
+
+![P4715L Delta](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/BA.5.2.1/P4715L_Delta.png?raw=true)
+### **P4715L** should be a very successful mutation, so as **D614G**, see below:   
+
+![D614G BA.5.2.1](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/BA.5.2.1/D614G_BA.5.2.1.png?raw=true)
+
+![D614G BA.5](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/BA.5.2.1/D614G_BA5.png?raw=true)
+
+![D614G Delta](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/BA.5.2.1/D614G_Delta.png?raw=true)
