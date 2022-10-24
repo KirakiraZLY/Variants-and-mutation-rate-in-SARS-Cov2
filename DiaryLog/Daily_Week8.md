@@ -42,3 +42,6 @@ L452R BA.2.12 doesn't have.
 ![L452R BA.4](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/L452R/L452R_BA4.png?raw=true)
 
 ![L452R BA.5](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week8/L452R/L452R_BA5.png?raw=true)
+
+# BA.5.2.1
+![P4715L BA.5.2.1]()
