@@ -20,4 +20,11 @@ BA.2-->BA.5-->BA.5.2-->BF.7
 BA.2: 2021-10-22   
 BA.5: 2022-01-10, South Africa, L452R F486B   
 BA.5.2 2022-04-11: ORF9b: D16G
-BF.7 2022-05-13 Belgium, R346T
+BF.7 2022-05-13 Belgium, R346T   
+
+## 3. Mutations
+Mutations on RBD are mostly concentrated in R346, R356, K444, L452, N460K, F486.   
+BA.2.12 from India, BA.2.12.1 from Canada.   
+Spike mutations L452Q and S704L are from antigenic drift, which are hard to accumulate. **But in only a month(Feb 2022), 2 mutations are accumulated.**   
+S704L also shows convergency, that BA.1, BA.2, BA.5 all have **S704L change**. And BA.1 + S704L has growth advantage than BA.1
+## 4. L452R
