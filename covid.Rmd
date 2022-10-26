@@ -26,7 +26,7 @@ covid <- readRDS(filename)
 Modify on file
 ```{r}
 
-covid$country[covid$country == 'Taiwan'] <- 'Taiwan Province of China'
+# covid$country[covid$country == 'Taiwan'] <- 'Taiwan Province of China'
 
 covid$VarShort[covid$Variant == 'VOC Omicron GRA (B.1.1.529+BA.*) first detected in Botswana/Hong Kong/South Africa']  <- 'VOC Omicron GRA'
 covid$VarShort[covid$Variant == 'VOC Alpha GRY (B.1.1.7+Q.*) first detected in the UK']  <- 'VOC Alpha GRY'
@@ -42,9 +42,11 @@ covid$VarShort[covid$Variant == 'VOI Kappa G/452R.V3 (B.1.617.1) first detected 
 covid$VarShort[covid$Variant == 'VOI Lambda GR/452Q.V1 (C.37+C.37.1) first detected in Peru']  <- 'VOI Lambda GR'
 covid$VarShort[covid$Variant == 'VOI Eta G/484K.V3 (B.1.525) first detected in UK/Nigeria']  <- 'VOI Eta G'
 covid$VarShort[covid$Variant == 'VOI Theta GR/1092K.V1 (P.3) first detected in the Philippines']  <- 'VOI Theta GR'
-
+covid <- filter(covid,covid$n_total != 0)
 # colnames(covid)[names(covid) == 'AA Substitutions'] <- "AASubstitutions" 
-# # saveRDS(covid, file = filename)
+# saveRDS(covid, file = filename)
+
+
 
 ```
 
@@ -215,4 +217,20 @@ ggplot(data = covid, mapping = aes(x = date, y = GCContent, col = covid$VarShort
   ylim(0.35,0.4)
 ```
 The stability of RNA of different variants are not changed significantly, so the different mutation rate would come from other reasons.
+
+
+10. Checking Num of guanine variaty
+```{r}
+library(gridExtra)
+ggplot(data = covid, mapping = aes(x = date, y = G, col = covid$VarShort)) +
+  geom_point() +
+  labs(title = "# Guanine")
+```
+
+```{r}
+covid %>% filter(gene == "S") %>% count(aa_change) %>% arrange(-n)
+```
+```{r}
+covid %>% filter(gene == "S") %>% count(effect) %>% arrange(-n)
+```
 

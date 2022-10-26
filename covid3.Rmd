@@ -66,10 +66,15 @@ names(tb1) <- c("date","num1")
 names(tb2) <- c("date","num2")
 covid4_ba5 <- merge(tb1,tb2,by = "date")
 covid4_ba5["Freq"] <- covid4_ba5$num1 / covid4_ba5$num2
+
+library(lubridate)
+# date <- as.Date(covid4_ba5$date, "%Y/%m/%d")
+# covid4_ba5 <- mutate(covid4_ba5, date)
+covid4_ba5$date = ymd(covid4_ba5$date)
+Sys.setlocale("LC_TIME", "English") 
 ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
   geom_point() +
-  labs(title = "S704L, BA.5/BA.4") +
-  scale_x_discrete(" ")
+  labs(title = "S704L, BA.5/BA.4")
 
 covid3_ba2 %>% filter(aa_change == "S704L")
 tb1 <- table(covid3_ba2$date)
@@ -255,6 +260,22 @@ covid4_ba5["Freq"] <- covid4_ba5$num1 / covid4_ba5$num2
 ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
   geom_point() +
   labs(title = "D614G, BA.5.2.1") +
+  scale_x_discrete(" ")
+```
+5. Num of mutations in Omicron variants
+```{r}
+covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.5.2.1"),]
+tb1 <- table(covid3_ba5$date)
+tb2 <- table(covid_2$date)
+tb1 <- data.frame(tb1)
+tb2 <- data.frame(tb2)
+names(tb1) <- c("date","num1")
+names(tb2) <- c("date","num2")
+Num_mutation <- merge(tb1,tb2,by = "date")
+Num_mutation["Freq"] <- Num_mutation$num1 / Num_mutation$num2
+ggplot(data = Num_mutation, mapping = aes(x = date, y = Freq)) +
+  geom_point() +
+  labs(title = "Mutation rate by date, BA.5.2.1") +
   scale_x_discrete(" ")
 ```
 
