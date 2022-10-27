@@ -15,4 +15,4 @@ BA.4 appeared in Japan, while BA.5 occured in South Africa. Both variants showed
 ![D614G,Delta](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week10/D614G%2CDelta.png?raw=true)
 ![D614G,BA.5.2.1](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week10/D614G%2CBA.5.2.1.png?raw=true)
 D614G was almost fitted while overcompeted by some other variants and frequency dropped(as Delta was defeated by Omicron). However, in Omicron variants, D614G rose again, showing its appearance is not from hitchhiking, but adaptive evolution.   
-**So how strong is this adaptive evolution?**
+## **So how strong is this adaptive evolution?**
