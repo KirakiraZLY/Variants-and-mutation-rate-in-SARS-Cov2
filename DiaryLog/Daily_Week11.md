@@ -19,7 +19,7 @@ Since we don't have the gene sequencial data, we cannot make count on number of 
 ![zly_formula](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/ZLY_formula.jpg?raw=true)
 rdNdS: ratio of dn/ds   
 ![rdNdS](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/rdNdS.png?raw=true)   
-rdNdS in different lineages and variants. **Numerator is elder group, and Denominator is the youth group.** It shows that Delta variants were better adapted to elder group, while Omicron are inverted.   
+rdNdS in different lineages and variants. **Numerator represents the elder group, and Denominator represents the youth group.** It shows that Delta variants were better adapted to elder group, while Omicron are inverted.   
 ![rdNdS_in_diff_var](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/rdNdS_in_diff_var.png?raw=true)   
 Grouping by different age, it's because generally we assume that elder group has weaker immune system than youth, thus we can regard them as two different immune environments.   
 **But it's very surprising to see Omicron is better adapted to the youth.**
