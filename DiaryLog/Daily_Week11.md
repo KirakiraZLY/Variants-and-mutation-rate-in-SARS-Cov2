@@ -9,7 +9,7 @@ It seems no? But we don't know why then.
 ## 2. Non-syn and Syn number change during time
 ![non-syn](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/Num_of_Nonsyn_with_date.png?raw=true)   
 ![syn](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/Num_of_Syn_with_date.png?raw=true)   
-It seems that both mutate gradually?   
+It seems that none mutates perfectly gradually?   
 Then do dn/ds test!!!   
 
 ## 3. alternative of dn/ds
