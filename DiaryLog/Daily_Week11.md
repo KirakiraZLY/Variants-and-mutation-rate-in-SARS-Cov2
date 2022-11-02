@@ -27,6 +27,6 @@ Grouping by different age, it's because generally we assume that elder group has
 ## Q1: In 2., count_S decreased in a period? why not gradually?   
 ## Q2: About rdNdS, why prefer youth group now?   
 plausible reasons:   
-1. in both groups, it is negative selected, while new variants get stronger adaptation in **youth group**.
+1. in both groups, it is negative selected, dnds < 1, while new variants get stronger adaptation in **youth group**.
 2. dnds(youth) > 1, dnds(elder) < 1, but why?
 3. both > 1, least possible, due to the selection in nature
