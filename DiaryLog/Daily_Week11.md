@@ -1,7 +1,7 @@
 # Week 11
 
 ## 1. What happened with the stratification of data?
-![stratification](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Mutations%20during%20time.png?raw=true)   
+![stratification](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/Data_by_region.png?raw=true)   
 In this plot, we can see that there are many n>50 before 2022-01, which looks weird. If this happened due to the limitation of detection condition?   
 ![countrylist](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/Stratification_country.png?raw=true)   
 It seems no? But we don't know why then.   
