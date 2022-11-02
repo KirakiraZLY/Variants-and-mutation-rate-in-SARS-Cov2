@@ -15,7 +15,7 @@ Then do dn/ds test!!!
 ## 3. alternative of dn/ds
 Since we don't have the gene sequencial data, we cannot make count on number of syn or non-syn sites.   
 
-### zly formula
+### ZLY formula(rdNdS)
 ![zly_formula](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/ZLY_formula.jpg?raw=true)
 rdNdS: ratio of dn/ds   
 ![rdNdS](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/rdNdS.png?raw=true)   
