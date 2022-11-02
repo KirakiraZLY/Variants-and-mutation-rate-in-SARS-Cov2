@@ -30,3 +30,5 @@ plausible reasons:
 1. in both groups, it is negative selected, dnds < 1, while new variants get stronger adaptation in **youth group**.
 2. dnds(youth) > 1, dnds(elder) < 1, but why?
 3. both > 1, least possible, due to the selection in nature
+
+## Q3: work reminder: clean those with count_S or count_N > 100
