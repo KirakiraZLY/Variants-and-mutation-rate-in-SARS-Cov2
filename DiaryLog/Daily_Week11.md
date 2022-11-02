@@ -16,7 +16,7 @@ Then do dn/ds test!!!
 Since we don't have the gene sequencial data, we cannot make count on number of syn or non-syn sites.   
 
 ### ZLY formula(rdNdS)
-![zly_formula](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/ZLY_formula.jpg?raw=true)
+![zly_formula](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/ZLY_formula.jpg?raw=true,style="transform:rotate(90deg);)
 rdNdS: ratio of dn/ds   
 ![rdNdS](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/rdNdS.png?raw=true)   
 rdNdS in different lineages and variants. **Numerator represents the elder group, and Denominator represents the youth group.** It shows that Delta variants were better adapted to elder group, while Omicron are inverted.   
