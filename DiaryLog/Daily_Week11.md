@@ -23,3 +23,10 @@ rdNdS in different lineages and variants. **Numerator represents the elder group
 ![rdNdS_in_diff_var](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/rdNdS_in_diff_var.png?raw=true)   
 Grouping by different age, it's because generally we assume that elder group has weaker immune system than youth, thus we can regard them as two different immune environments.   
 **But it's very surprising to see Omicron is better adapted to the youth.**
+
+## Q1: In 2., count_S decreased in a period? why not gradually?   
+## Q2: About rdNdS, why prefer youth group now?   
+plausible reasons:   
+1. in both groups, it is negative selected, while new variants get stronger adaptation in **youth group**.
+2. dnds(youth) > 1, dnds(elder) < 1, but why?
+3. both > 1, least possible, due to the selection in nature
