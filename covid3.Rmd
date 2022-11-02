@@ -36,9 +36,10 @@ covid_2 <- covid_2 %>%  filter(grepl(pattern = 'Spike', AASubstitutions))
 covid3 <- covid %>%
   filter(effect == "missense_variant")
 covid_snp_sub <- covid_2[,c("id","date","VarShort","pangolin_lineage")] 
-covid_ann_sub <- covid3[,c("id","position","aa_change")]
+# covid_ann_sub <- covid3[,c("id","position","aa_change")]
+covid_ann_sub <- covid[,c("id","position","aa_change")]
 covid3 <- merge(covid_ann_sub,covid_snp_sub,by = "id")
-
+covid3 <- covid3[!duplicated(covid3),]
 # covid5 <- covid3 %>%
 #   filter(aa_change == "K356T")
 # # covid5 <- covid5[covid5$pangolin_lineage == c("BA.1","BA.2","BA.2.12.1","BA.5"),]
@@ -50,14 +51,18 @@ covid3 <- merge(covid_ann_sub,covid_snp_sub,by = "id")
 
 Finding relative growth advantage of BA.5 to BA.2
 ```{r}
-covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.5","BA.4"),]
+# covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.4"),]
+
+covid3_ba5 <- covid3[covid3$VarShort == c("VOC Delta GK"),]
 covid3_ba2 <- covid3[covid3$pangolin_lineage == c("BA.2.12"),]
 covid3_delta <- covid3[covid3$VarShort == c("VOC Delta GK"),]
 ```
 
 
 ```{r}
-covid3_ba5 %>% filter(aa_change == "S704L")
+covid3_ba5 <- covid3
+# covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.5.2.1"),]
+covid3_ba5 <- covid3_ba5 %>% filter(aa_change == "L452R")  %>% filter(year(date) >= 2021)
 tb1 <- table(covid3_ba5$date)
 tb2 <- table(covid_2$date)
 tb1 <- data.frame(tb1)
@@ -74,21 +79,22 @@ covid4_ba5$date = ymd(covid4_ba5$date)
 Sys.setlocale("LC_TIME", "English") 
 ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
   geom_point() +
-  labs(title = "S704L, BA.5/BA.4")
-
-covid3_ba2 %>% filter(aa_change == "S704L")
-tb1 <- table(covid3_ba2$date)
-tb2 <- table(covid_2$date)
-tb1 <- data.frame(tb1)
-tb2 <- data.frame(tb2)
-names(tb1) <- c("date","num1")
-names(tb2) <- c("date","num2")
-covid4_ba2 <- merge(tb1,tb2,by = "date")
-covid4_ba2["Freq"] <- covid4_ba2$num1 / covid4_ba2$num2
-ggplot(data = covid4_ba2, mapping = aes(x = date, y = Freq)) +
-  geom_point() +
-  labs(title = "S704L, BA.2.12") +
-  scale_x_discrete(" ")
+  labs(title = "L452R") +
+  scale_x_date(limits = c())
+# 
+# covid3_ba2 %>% filter(aa_change == "S704L")
+# tb1 <- table(covid3_ba2$date)
+# tb2 <- table(covid_2$date)
+# tb1 <- data.frame(tb1)
+# tb2 <- data.frame(tb2)
+# names(tb1) <- c("date","num1")
+# names(tb2) <- c("date","num2")
+# covid4_ba2 <- merge(tb1,tb2,by = "date")
+# covid4_ba2["Freq"] <- covid4_ba2$num1 / covid4_ba2$num2
+# ggplot(data = covid4_ba2, mapping = aes(x = date, y = Freq)) +
+#   geom_point() +
+#   labs(title = "S704L, BA.2.12") +
+#   scale_x_discrete(" ")
 
 ```
 
@@ -277,5 +283,50 @@ ggplot(data = Num_mutation, mapping = aes(x = date, y = Freq)) +
   geom_point() +
   labs(title = "Mutation rate by date, BA.5.2.1") +
   scale_x_discrete(" ")
+```
+
+## Week 10
+ZLY formula
+```{r}
+
+zly1 <- mean(covid_2$count_N,na.rm=TRUE) / mean(covid_2$count_S,na.rm=TRUE)
+
+## Elders and Youths in BA.2
+ba2 <- covid_2[covid_2$pangolin_lineage == c("BA.5.2.1"),]
+# delta <- covid_2[covid_2$pangolin_lineage == c("BA.5"),]
+delta <- covid_2[covid_2$VarShort == c("VOC Delta GK"),]
+beta <- covid_2[covid_2$VarShort == c("VOC Beta GH"),]
+
+
+elder_ba2 <- ba2[ba2$`Patient age` > 60,]
+youth_ba2 <- ba2[ba2$`Patient age` < 40,]
+elder_delta <- delta[delta$`Patient age` > 60,]
+youth_delta <- delta[delta$`Patient age` < 40,]
+elder_beta <- beta[beta$`Patient age` > 60,]
+youth_beta <- beta[beta$`Patient age` < 40,]
+
+zly1 <- mean(elder_ba2$count_N,na.rm=TRUE) - mean(elder_beta$count_N,na.rm=TRUE)
+zly1 <- zly1/(mean(elder_ba2$count_S,na.rm=TRUE) - mean(elder_beta$count_S,na.rm=TRUE))
+zly2 <- mean(youth_ba2$count_N,na.rm=TRUE) - mean(youth_beta$count_N,na.rm=TRUE) 
+zly2 <- zly2/(mean(youth_ba2$count_S,na.rm=TRUE) - mean(youth_beta$count_S,na.rm=TRUE))
+
+
+
+zly3 <- mean(elder_delta$count_N,na.rm=TRUE) - mean(elder_beta$count_N,na.rm=TRUE)
+zly3 <- zly3/(mean(elder_delta$count_S,na.rm=TRUE) - mean(elder_beta$count_S,na.rm=TRUE))
+zly4 <- mean(youth_delta$count_N,na.rm=TRUE) - mean(youth_beta$count_N,na.rm=TRUE) 
+zly4 <- zly4/(mean(youth_delta$count_S,na.rm=TRUE) - mean(youth_beta$count_S,na.rm=TRUE))
+zly1/zly2 ## BA.2
+zly3/zly4 ## Delta
+```
+
+```{r}
+ba2 <- covid_2[covid_2$VarShort == c("VOC Alpha GRY"),]
+elder <- ba2[ba2$`Patient age` > 60,]
+youth <- ba2[ba2$`Patient age` < 40,]
+
+zly1 <- mean(elder$count_N,na.rm=TRUE) / mean(elder$count_S,na.rm=TRUE)
+zly2 <- mean(youth$count_N,na.rm=TRUE) / mean(youth$count_S,na.rm=TRUE)
+zly1/zly2
 ```
 

@@ -104,9 +104,13 @@ ins
 
 barplot(table(covid_small$pangolin_lineage))
 
-ggplot(data = covid_small, mapping = aes(x = date, y = n_total, col = covid_small$Clade)) +
-  geom_point() +
-  xlab('date')
+covid1 <- covid[covid$VarShort == c("VOC Delta GK"),] %>% filter(n_total > 50)
+
+# ggplot(data = covid1, mapping = aes(x = date, y = n_total, col = covid1$country)) +
+#   geom_point() +
+#   xlab('date')
+
+covid1 %>% count(country) %>% arrange(-n)
 
 ```
 
@@ -198,6 +202,7 @@ summary(m1)
 
 ```
 ```{r}
+covid <- covid[covid$VarShort == c("VOC Omicron GRA", "VOC Alpha GRY", "VOC Delta GK", "VOC Beta GH"),]
 ggplot(data = covid, mapping = aes(x = date, y = count_S, col = covid$VarShort)) +
   # geom_point() +
   xlab('date') +
@@ -233,4 +238,22 @@ covid %>% filter(gene == "S") %>% count(aa_change) %>% arrange(-n)
 ```{r}
 covid %>% filter(gene == "S") %>% count(effect) %>% arrange(-n)
 ```
+
+```{r}
+
+ggplot(covid,mapping = aes(x = date, y = count_S)) +
+  geom_point()
+ggplot(covid,mapping = aes(x = date, y = count_N)) +
+  geom_point()
+
+```
+```{r}
+ggplot(covid1,mapping = aes(x = date, y = count_S)) +
+  geom_point()
+ggplot(covid1,mapping = aes(x = date, y = count_N)) +
+  geom_point()
+
+```
+
+
 
