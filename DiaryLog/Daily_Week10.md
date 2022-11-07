@@ -1,18 +1,34 @@
-# Week 8
+# Week 11
 
-## 1. Data Cleaning   
-1. Deleted those data with 0 mutations
-2. Deleted those data in SNP change with duplicated values.
-   ![duplicatedcheck](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week10/Duplicated%20Value%20Check.png?raw=true)
-   ![duplicated](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week10/DuplicatedValues.png?raw=true)
-3. After omitting, 8320141 data left.
+## 1. What happened with the stratification of data?
+![stratification](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/Data_by_region.png?raw=true)   
+In this plot, we can see that there are many n>50 before 2022-01, which looks weird. If this happened due to the limitation of detection condition?   
+![countrylist](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/Stratification_country.png?raw=true)   
+It seems no? But we don't know why then.   
 
-## 2. Convergence
-![L452R,BA.4](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week10/L452R%2CBA.4.png?raw=true)
-![L452R,BA.5](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week10/L452R%2CBA.5.png?raw=true)
-BA.4 appeared in Japan, while BA.5 occured in South Africa. Both variants showed the same mutation in different environments, showing the convergence strength.   
-## 3. Potentially advantage aa_change
-![D614G,Delta](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week10/D614G%2CDelta.png?raw=true)
-![D614G,BA.5.2.1](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week10/D614G%2CBA.5.2.1.png?raw=true)
-D614G was almost fitted while overcompeted by some other variants and frequency dropped(as Delta was defeated by Omicron). However, in Omicron variants, D614G rose again, showing its appearance is not from hitchhiking, but adaptive evolution.   
-## **So how strong is this adaptive evolution?**
+## 2. Non-syn and Syn number change during time
+![non-syn](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/Num_of_Nonsyn_with_date.png?raw=true)   
+![syn](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/Num_of_Syn_with_date.png?raw=true)   
+It seems that none mutates perfectly gradually?   
+Then do dn/ds test!!!   
+
+## 3. alternative of dn/ds
+Since we don't have the gene sequencial data, we cannot make count on number of syn or non-syn sites.   
+
+### ZLY formula(rdNdS)
+![zly_formula](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/ZLY_formula.jpg?raw=true,style="transform:rotate(90deg);)
+rdNdS: ratio of dn/ds   
+![rdNdS](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/rdNdS.png?raw=true)   
+rdNdS in different lineages and variants. **Numerator represents the elder group, and Denominator represents the youth group.** It shows that Delta variants were better adapted to elder group, while Omicron are inverted.   
+![rdNdS_in_diff_var](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/rdNdS_in_diff_var.png?raw=true)   
+Grouping by different age, it's because generally we assume that elder group has weaker immune system than youth, thus we can regard them as two different immune environments.   
+**But it's very surprising to see Omicron is better adapted to the youth.**
+
+## Q1: In 2., count_S decreased in a period? why not gradually?   
+## Q2: About rdNdS, why prefer youth group now?   
+plausible reasons:   
+1. in both groups, it is negative selected, dnds < 1, while new variants get stronger adaptation in **youth group**.
+2. dnds(youth) > 1, dnds(elder) < 1, but why?
+3. both > 1, least possible, due to the selection in nature
+
+## Q3: work reminder: clean those with count_S or count_N > 100
