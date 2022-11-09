@@ -1,4 +1,4 @@
-# Week 11
+# Week 10
 
 ## 1. What happened with the stratification of data?
 ![stratification](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week10/Data_by_region.png?raw=true)   
