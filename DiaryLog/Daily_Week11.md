@@ -42,7 +42,9 @@ We can infer that dNdS in most proportion of Delta are much higher that those of
 ![dNdS_Omicron_point](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/dNdSbyDate/dNdS_poing_Omicron.png?raw=true)
 
 ### rdNdS comparing to Delta
-$rdNdS=\frac{dNdS_L}{dNdS_\delta}$
+$$
+rdNdS=\frac{dNdS_L}{dNdS_\delta}
+$$
 ![rdNdS](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/rdNdS_lineage_delta.png?raw=true)
 
 ## Next
@@ -52,3 +54,4 @@ Other than this, I don't have idea. Can I implement it with neural network or ma
 
 2. Quantify on others?
 3. Other directions to analyze strength of selection?
+4. Which aa_change influenced this?
