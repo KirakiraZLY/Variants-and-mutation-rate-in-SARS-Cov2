@@ -14,7 +14,9 @@ Date: after 2022-09-01
 
    
 ### 3. Mutation rate of different *
-$y=XW+b$
+$$
+y=XW+b 
+$$
 ![Mutation_Variants](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/MutationRateofDifferentVariants.png?raw=true)   
 ![Mutation_Lineages](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/MutationRateofDifferentLineages.png?raw=true)
 
@@ -24,7 +26,9 @@ $y=XW+b$
 ![Symptoms_Lineages](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/Symptoms/Symptoms%20via%20Lineages.png?raw=true)
 
 ### 5. dNdS by date   
-$dNdS=\frac{NumN - NumN_\beta}{NumS - NumS_\beta}$
+$$
+dNdS=\frac{NumN - NumN_\beta}{NumS - NumS_\beta} 
+$$
 ![dnds_Delta](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/dNdSbyDate/dndsDelta.png?raw=true)
 ![dnds_Omicron](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/dNdSbyDate/dndsOmicron.png?raw=true)
 ![dnds_BA.2](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/dNdSbyDate/dnds_BA.2.png?raw=true)
