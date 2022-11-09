@@ -8,15 +8,15 @@
 ![L452R,BA.5](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/L452R/L452R%2CBA.5.png?raw=true)
 ![L452R,BF.7](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/L452R/L452R%2CBF.7.png?raw=true)
 
-### 2. PrepViralLineageAmongInfection
+### 2. Prep Viral Lineage Among Infection
 Date: after 2022-09-01
 ![PrepViralLineageAmongInfection](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/PrepViralLineageAmongInfection.png?raw=true)   
 
    
-### 3. Mutation rate of different *
-$$
+### 3. Mutation rate of different * 
+$$ 
 y=XW+b 
-$$
+ $$ 
 ![Mutation_Variants](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/MutationRateofDifferentVariants.png?raw=true)   
 ![Mutation_Lineages](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week11/MutationRateofDifferentLineages.png?raw=true)
 
@@ -51,3 +51,4 @@ In articles I read, they just used dnds and MK test, with checking p-value(by wh
 Other than this, I don't have idea. Can I implement it with neural network or machine learning?
 
 2. Quantify on others?
+3. Other directions to analyze strength of selection?
