@@ -13,6 +13,8 @@ library(tidyverse)
 library(data.table)
 library(DBI)
 library(RSQLite)
+library(scales)
+library(data.table)
 ```
 
 ```{r}
@@ -27,6 +29,7 @@ filename <- file.choose()
 covid_2<- readRDS(filename)
 ## 少的那个
 covid_2 <- covid_2 %>%  filter(grepl(pattern = 'Spike', AASubstitutions))
+# covid_2 <- df[complete.cases(covid),]
 # colnames(covid_2)[names(covid_2) == 'GC-Content'] <- "GCContent"
 # saveRDS(covid_2, file = filename)
 ```
@@ -37,9 +40,10 @@ covid3 <- covid %>%
   filter(effect == "missense_variant")
 covid_snp_sub <- covid_2[,c("id","date","VarShort","pangolin_lineage")] 
 # covid_ann_sub <- covid3[,c("id","position","aa_change")]
-covid_ann_sub <- covid[,c("id","position","aa_change")]
+covid_ann_sub <- covid[,c("id","position","aa_change","impact")]
 covid3 <- merge(covid_ann_sub,covid_snp_sub,by = "id")
 # covid3 <- covid3[!duplicated(covid3),]
+
 # covid5 <- covid3 %>%
 #   filter(aa_change == "K356T")
 # # covid5 <- covid5[covid5$pangolin_lineage == c("BA.1","BA.2","BA.2.12.1","BA.5"),]
@@ -47,6 +51,13 @@ covid3 <- merge(covid_ann_sub,covid_snp_sub,by = "id")
 # ggplot(data = covid5, mapping = aes(x = date, col = pangolin_lineage)) +
 #   geom_histogram() +
 #   labs(title = "K356T")
+```
+
+## covid3 file just read from here
+```{r}
+# saveRDS(covid3, file = "mutations_covid3.rds")
+# filename <- file.choose()
+# covid3 <- readRDS(filename)
 ```
 
 Finding relative growth advantage of BA.5 to BA.2
@@ -60,9 +71,12 @@ covid3_delta <- covid3[covid3$VarShort == c("VOC Delta GK"),]
 
 
 ```{r}
-covid3_ba5 <- covid3
-# covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.5.2.1"),]
-covid3_ba5 <- covid3_ba5 %>% filter(aa_change == "L452R")  %>% filter(year(date) >= 2021)
+# covid3_ba5 <- covid3
+covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BQ.1.1"),]
+# covid3_ba5 <- covid3[covid3$VarShort == c("VOC Omicron GRA"),]
+# covid3_ba5 <- covid3[covid3$VarShort == c("VOC Delta GK"),]
+
+covid3_ba5 <- covid3_ba5 %>% filter(aa_change == "R346T") %>% filter(year(date) >= 2021)
 tb1 <- table(covid3_ba5$date)
 tb2 <- table(covid_2$date)
 tb1 <- data.frame(tb1)
@@ -79,8 +93,9 @@ covid4_ba5$date = ymd(covid4_ba5$date)
 Sys.setlocale("LC_TIME", "English") 
 ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
   geom_point() +
-  labs(title = "L452R") +
-  scale_x_date(limits = c())
+  labs(title = "R346T,BQ.1.1") +
+  scale_x_date(limits = c()) +
+  scale_y_continuous(limits=c(0,0.2),oob=rescale_none)
 # 
 # covid3_ba2 %>% filter(aa_change == "S704L")
 # tb1 <- table(covid3_ba2$date)
@@ -189,8 +204,8 @@ ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
 
 2. BF.7 and BA.5
 ```{r}
-covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.5"),]
-covid3_ba2 <- covid3[covid3$pangolin_lineage == c("BF.5"),]
+covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BF.7"),]
+covid3_ba2 <- covid3[covid3$pangolin_lineage == c("BF.7"),]
 ```
 
 ```{r}
@@ -211,7 +226,7 @@ ggplot(data = covid4_ba5, mapping = aes(x = date, y = Freq)) +
 
 3. Others
 ```{r}
-covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.5"),]
+covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BF.7"),]
 # covid3_ba2 <- covid3[covid3$pangolin_lineage == c("BF.5"),]
 
 covid3_ba5 <- covid3_ba5 %>% filter(aa_change == "P4715L")
@@ -251,7 +266,7 @@ covid3_ba5 %>% count(aa_change) %>% arrange(-n)
 ```
 
 ```{r}
-covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BA.5.2.1"),]
+covid3_ba5 <- covid3[covid3$pangolin_lineage == c("BF.7"),]
 # covid3_ba2 <- covid3[covid3$pangolin_lineage == c("BF.5"),]
 
 covid3_ba5 <- covid3_ba5 %>% filter(aa_change == "D614G")
@@ -328,5 +343,181 @@ youth <- ba2[ba2$`Patient age` < 40,]
 zly1 <- mean(elder$count_N,na.rm=TRUE) / mean(elder$count_S,na.rm=TRUE)
 zly2 <- mean(youth$count_N,na.rm=TRUE) / mean(youth$count_S,na.rm=TRUE)
 zly1/zly2
+```
+
+
+
+## Week 11
+N/S on Delta&Omicron
+```{r}
+
+# zly1 <- mean(covid_2$count_N,na.rm=TRUE) / mean(covid_2$count_S,na.rm=TRUE)
+
+## Elders and Youths in BA.2
+A <- covid_2[covid_2$pangolin_lineage == c("BQ.1.1"),]
+# B <- covid_2[covid_2$pangolin_lineage == c("BA.2.1"),]
+# c <- covid_2[covid_2$pangolin_lineage == c("BA.2"),]
+B <- covid_2[covid_2$VarShort == c("VOC Delta GK"),]
+C <- covid_2[covid_2$VarShort == c("VOC Beta GH"),]
+
+zly1 <- mean(A$count_N,na.rm=TRUE) - mean(C$count_N,na.rm=TRUE)
+zly1 <- zly1/(mean(A$count_S,na.rm=TRUE) - mean(C$count_S,na.rm=TRUE))
+zly2 <- mean(B$count_N,na.rm=TRUE) - mean(C$count_N,na.rm=TRUE)
+zly2 <- zly2/(mean(B$count_S,na.rm=TRUE) - mean(C$count_S,na.rm=TRUE))
+
+# zly1 <- mean(A$count_N,na.rm=TRUE) / mean(A$count_S,na.rm=TRUE)
+# zly2 <- mean(B$count_N,na.rm=TRUE) / mean(B$count_S,na.rm=TRUE)
+
+zly1 / zly2
+```
+
+```{r}
+
+tab <- c(0.3769038,0.2190845,0.1797233,0.2105012,0.2507981,0.1953743,0.199553,0.3048932
+)
+var <- c("BA.1",	"BA.2",	"BA.2.1",	"BA.4"	,"BA.5"	,"BA.5.2.1","BF.7","BQ.1.1")
+tb <- data.frame(var,tab)
+tb$var <- factor(tb$var,levels = c("BA.1",	"BA.2",	"BA.2.1",	"BA.4"	,"BA.5"	,"BA.5.2.1","BF.7","BQ.1.1"))
+# plot(tb, main = bquote('rdNdS'))
+ggplot(tb,mapping = aes(x = tb$var, y = tb$tab)) +
+  geom_bar(position="dodge",stat="identity") +
+  labs(title = "rdNdS: lineages / Delta") 
+# +
+#   scale_y_continuous(limits=c(0.75,1.1),oob=rescale_none)
+```
+
+```{r}
+# 
+# E <- covid_2[covid_2$pangolin_lineage == c("BQ.1.1"),]
+# E <- covid_2[covid_2$VarShort == c("VOC Delta GK"),]
+E <- covid_2[covid_2$VarShort == c("VOC Omicron GRA"),]
+
+num_C_N = mean(C$count_N,na.rm = TRUE)
+num_C_S = mean(C$count_S,na.rm = TRUE)
+
+D <- E
+D['count_N'] = E['count_N'] - num_C_N
+D['count_S'] = E['count_S'] - num_C_S
+D['dNdS'] = D$count_N / D$count_S
+
+D$col<- ifelse(D$dNdS >= 0, 1, 0)
+D$col<-as.factor(D$col)
+
+
+ggplot(data = D, mapping = aes(x = date, y = dNdS, fill = D$col, col = D$col)) +
+  geom_point() +
+  labs(title = "dNdS in Omicron")
+# ggplot(data = D, mapping = aes(x = date, y = dNdS ,fill = D$col, col = D$col)) +
+#   geom_col(position = "identity",show.legend = FALSE, width = .5) +
+#   labs(title = "dNdS in BQ.1.1")
+```
+
+Check on Spike and others
+```{r}
+
+filename <- file.choose()
+covid_2<- readRDS(filename)
+
+```
+
+```{r}
+
+# zly1 <- mean(covid_2$count_N,na.rm=TRUE) / mean(covid_2$count_S,na.rm=TRUE)
+
+## Elders and Youths in BA.2
+A <- covid_2[covid_2 == c("BQ.1.1"),]
+# B <- covid_2[covid_2$pangolin_lineage == c("BA.2.1"),]
+# c <- covid_2[covid_2$pangolin_lineage == c("BA.2"),]
+B <- covid_2[covid_2$VarShort == c("VOC Delta GK"),]
+C <- covid_2[covid_2$VarShort == c("VOC Beta GH"),]
+
+zly1 <- mean(A$count_N,na.rm=TRUE) - mean(C$count_N,na.rm=TRUE)
+zly1 <- zly1/(mean(A$count_S,na.rm=TRUE) - mean(C$count_S,na.rm=TRUE))
+zly2 <- mean(B$count_N,na.rm=TRUE) - mean(C$count_N,na.rm=TRUE)
+zly2 <- zly2/(mean(B$count_S,na.rm=TRUE) - mean(C$count_S,na.rm=TRUE))
+
+# zly1 <- mean(A$count_N,na.rm=TRUE) / mean(A$count_S,na.rm=TRUE)
+# zly2 <- mean(B$count_N,na.rm=TRUE) / mean(B$count_S,na.rm=TRUE)
+
+zly1 / zly2
+
+```
+
+Mutations with time
+```{r}
+# covid_4 <- covid_2[covid_2$VarShort == c("VOC Omicron GRA", "VOC Alpha GRY", "VOC Delta GK", "VOC Beta GH"),]
+covid_4 <- covid_2[covid_2$pangolin_lineage == c("BA.1",	"BA.2",	"BA.2.1",	"BA.4"	,"BA.5"	,"BA.5.2.1","BF.7","BQ.1.1"),]
+ggplot(data = covid_4, mapping = aes(x = date, y = count_S, col = covid_4$pangolin_lineage)) +
+  # geom_point() +
+  xlab('date') +
+  ylim(0,20) +
+  labs(title = "Mutation rate of different variants") +
+  geom_smooth(method = lm)
+```
+
+
+Symptons
+```{r}
+
+covid_5 <- covid3[covid3$pangolin_lineage == c("BA.2","BA.2.12.1","BA.4","BA.5","BF.7","BQ.1.1"),]
+# covid_5 <- covid3[covid3$VarShort == c("VOC Omicron GRA", "VOC Alpha GRY", "VOC Delta GK", "VOC Beta GH"),]
+# covid_5 <- [covid3 == c("BQ.1.1"),]
+
+```
+
+
+```{r}
+covid_5$impact <- factor(covid_5$impact, levels = c("LOW","MODERATE","MODIFIER","HIGH"))
+ggplot(data = covid_5,aes(x =impact,fill=pangolin_lineage)) +
+  geom_bar(alpha=0.4,position = "identity") +
+  labs(title = "Symptoms via Lineages_Omicron")
+
+```
+
+Preportion of different lineages by date
+```{r}
+group <- covid3 %>%
+  count(date, pangolin_lineage) %>%
+  drop_na()
+group <- group[order(group$date, decreasing = TRUE), ]
+
+group <- group %>%                                      # Top N highest values by group
+  arrange(desc(n)) %>% 
+  group_by(date) %>%
+  slice(1:3)
+group <- group[group$date > "2022-09-01",]
+```
+
+
+```{r}
+ggplot(data = group, mapping = aes(x = date, y = n, fill = pangolin_lineage)) +
+  geom_bar(position = "fill", stat = "identity") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "%viral lineages among infection") %>%
+  scale_x_date(date_breaks = "1 month")
+```
+
+## Week 12
+Calculate real dn/ds
+```{r}
+covid_2 <- covid_2 %>% arrange(date)
+delta_N <- diff(covid_2$count_N)
+delta_N <- c(0,delta_N)
+covid_2$delta_N <- delta_N
+
+delta_S <- diff(covid_2$count_S)
+delta_S <- c(0,delta_S)
+covid_2$delta_S <- delta_S
+
+covid_2$dnds <- delta_N/delta_S
+
+for (i in 1:ncol(md)){
+  md[,i][is.na(md[,i])] <- 0
+}
+```
+
+```{r}
+ggplot(covid_2, aes(x = date, y = dnds, col = VarShort)) +
+  geom_point()
 ```
 
