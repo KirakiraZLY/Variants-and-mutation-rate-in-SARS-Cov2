@@ -500,8 +500,61 @@ ggplot(data = group, mapping = aes(x = date, y = n, fill = pangolin_lineage)) +
 ## Week 12
 Calculate real dn/ds
 ```{r}
-covid_ns <- covid_2 %>% arrange(pangolin_lineage,date) %>% filter(pangolin_lineage == c("BA.1","BA.2","BA.2.12.1","BA.4","BA.5","BF.7","BQ.1.1"))
+covid_ns <- covid_2 %>% arrange(pangolin_lineage,date) 
+# %>% filter(pangolin_lineage == c("BA.1","BA.2","BA.2.12.1","BA.4","BA.5","BF.7","BQ.1.1"))
+
+
 # covid_2 <- covid_2[order(covid_2$pangolin_lineage,covid_2$date)]
+
+covid_n_1 <- aggregate(covid_ns$count_N, by=list( covid_ns$pangolin_lineage,covid_ns$VarShort,covid_ns$date),mean)
+# covid_ns <- data.frame(covid_ns,covid_ns_1)
+names(covid_n_1) <- c("pangolin_lineage", "date", "count_N")
+
+covid_n_1 <- covid_n_1[order(covid_n_1$pangolin_lineage,covid_n_1$date),]
+
+# ggplot(covid_n_1, aes(x = date, y = count_N, color = pangolin_lineage)) +
+#   geom_point() +
+#   labs(title = "Count_N by lineage")
+
+############### N ##############
+############### S ##############
+
+covid_s_1 <- aggregate(covid_ns$count_S, by=list(covid_ns$pangolin_lineage,covid_ns$VarShort,covid_ns$date),mean)
+# covid_ns <- data.frame(covid_ns,covid_ns_1)
+names(covid_s_1) <- c("pangolin_lineage", "VarShort", "date", "count_S")
+
+covid_s_1 <- covid_s_1[order(covid_s_1$pangolin_lineage,covid_s_1$date),]
+
+ggplot(covid_s_1, aes(x = date, y = count_S, color = VarShort)) +
+  geom_point() +
+  labs(title = "Count_S by lineage")
+
+delta_N <- diff(covid_n_1$count_N)
+delta_N <- c(0,delta_N)
+covid_n_1$delta_N <- delta_N
+
+
+delta_S <- diff(covid_s_1$count_S)
+delta_S <- c(0,delta_S)
+covid_s_1$delta_S <- delta_S
+
+dnds <- data.frame(covid_s_1$date, covid_s_1$pangolin_lineage,delta_N/delta_S)
+names(dnds) <- c("date","pangolin_lineage","dnds")
+
+
+dnds <- dnds[!is.infinite(dnds$dnds),]
+dnds <- dnds[!is.na(dnds$dnds),]
+
+# ggplot(dnds, aes(x = date, y = dnds)) +
+#   geom_point() +
+#   ylim(-100,100) +
+#   labs(title = "dNdS")
+
+  
+```
+
+
+```{r}
 delta_N <- diff(covid_ns$count_N)
 delta_N <- c(0,delta_N)
 covid_ns$delta_N <- delta_N
