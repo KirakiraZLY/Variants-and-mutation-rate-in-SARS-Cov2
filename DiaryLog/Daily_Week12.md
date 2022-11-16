@@ -6,7 +6,8 @@
 
 Method as below
 
-## 3. Slope of Count_N/Count_S != dNdS
+## 3. Slope of Count_N/Count_S == 0 doesn't mean of neutral selection
+
 Obs:
 ![slope_not_dnds](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/slope_not_dnds.jpg?raw=true)
 Proof:
