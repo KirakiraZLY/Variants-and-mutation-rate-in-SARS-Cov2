@@ -27,5 +27,15 @@ reference: https://www.ecdc.europa.eu/en/covid-19/variants-concern
 **Blue: >1, positive   
 Red: <1, negative**
 
-XBB has not many data, very noisy.
-dNdS of XBB: 11.26744
+XBB has not many data, very noisy.   
+_dNdS of XBB: 11.26744_
+
+## 6. Distribution of these lineages
+一. Slope of Count_N   
+![slope_N](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/Slope_CN.png?raw=true)   
+二. Slope of Count_S   
+![slope_S](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/Slope_CS.png?raw=true)   
+三. Point plot of Count_N   
+![point_N](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/Count_N.png?raw=true)   
+四. Point plot of Count_S   
+![point_S](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/Count_S.png?raw=true)
