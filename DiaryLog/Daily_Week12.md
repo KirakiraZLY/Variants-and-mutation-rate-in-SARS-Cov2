@@ -22,4 +22,7 @@ Proof:
 ![lineages](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/ConcernLineages.jpg?raw=true)
 reference: https://www.ecdc.europa.eu/en/covid-19/variants-concern
 
-## 5. 
+## 5. dNdS_new of Concern Lineages
+![inDifferentLineages](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/dNdS_in_different_concern_lineages.png?raw=true)   
+**Blue: >1, positive   
+Red: <1, negative**
