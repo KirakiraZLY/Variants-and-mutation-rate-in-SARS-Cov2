@@ -2,7 +2,9 @@
 ## 1. Create covid4.md and use file metadata_snpeff_tidy_1000K_downsampled.rds
 
 ## 2. dNdS in different lineages
-![dNdS_lineages](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/dNdS_lineages.png?raw=true)     
+![dNdS_lineages](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/dNdS_lineages.png?raw=true) 
+
+Methods as below
 
 ## 3. Slope of Count_N/Count_S != dNdS
 Obs:
