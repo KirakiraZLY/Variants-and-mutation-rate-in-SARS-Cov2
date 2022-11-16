@@ -4,7 +4,7 @@
 ## 2. dNdS in different lineages
 ![dNdS_lineages](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/dNdS_lineages.png?raw=true) 
 
-Method as below
+**Method as below**
 
 ## 3. Slope of Count_N/Count_S == 0 doesn't mean of neutral selection
 
