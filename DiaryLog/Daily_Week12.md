@@ -43,7 +43,9 @@ _dNdS of XBB: 11.26744_
 ![point_S](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/Count_S.png?raw=true)
 
 ## 7.Conclusion   
-Those "popular" lineages were mostly positive selected by environment. Thus, for BQ.1.1, we should focus on if it will continue been positively selected. And for XBB, with more data, dNdS would get lower, but will it still be positive?
+Those "popular" lineages were mostly positive selected by environment. Thus, for BQ.1.1, we should focus on if it will continue been positively selected. And for XBB, with more data, dNdS would get lower, but will it still be positive?   
+
+While result of BA.2 is "interesting". What happened to that? Non_Syn increased fast at first, while got flat after.
 
 ## 8. Continue   
 I could take a look on the trend of dNdS on each lineages, that since when BA.2 changed from positive to negative?   
