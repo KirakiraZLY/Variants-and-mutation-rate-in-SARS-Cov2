@@ -23,6 +23,8 @@ Proof:
 reference: https://www.ecdc.europa.eu/en/covid-19/variants-concern
 
 ## 5. dNdS_new of Concern Lineages
+I did linear regression on all 455 Omicron lineages, and picked a subset of them to plot. Those plotted lineages are lineages of concern.
+
 ![inDifferentLineages](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/dNdS_in_different_concern_lineages.png?raw=true)   
 **Blue: >1, positive   
 Red: <1, negative**
@@ -39,3 +41,11 @@ _dNdS of XBB: 11.26744_
 ![point_N](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/Count_N.png?raw=true)   
 四. Point plot of Count_S   
 ![point_S](https://github.com/KirakiraZLY/Variants-and-mutation-rate-in-SARS-Cov2/blob/main/Img/Week%2012/Count_S.png?raw=true)
+
+## 7.Conclusion   
+Those "popular" lineages were all positive selected by environment. Thus, for BQ.1.1, we should focus on if it will continue been positively selected. And for XBB, with more data, dNdS would get lower, but will it still be positive?
+
+## 8. Continue   
+I could take a look on the trend of dNdS on each lineages, that since when BA.2 changed from positive to negative?   
+
+And I think BA.1 has been positively selected till end, it could mean that all BA.1 have been mutated to another lineage(some aa_change has been fixed.)
