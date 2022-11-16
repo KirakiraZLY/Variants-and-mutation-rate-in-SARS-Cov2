@@ -45,7 +45,7 @@ _dNdS of XBB: 11.26744_
 ## 7.Conclusion   
 Those "popular" lineages were mostly positive selected by environment. Thus, for BQ.1.1, we should focus on if it will continue been positively selected. And for XBB, with more data, dNdS would get lower, but will it still be positive?   
 
-While result of BA.2 is "interesting". What happened to that? Non_Syn increased fast at first, while got flat after.
+While result of BA.2 is "interesting". What happened to that? Non_Syn increased fast at first, while got flat after. In other words, BA.2 was firstly positive selected, while later negatively.
 
 ## 8. Continue   
 I could take a look on the trend of dNdS on each lineages, that since when BA.2 changed from positive to negative?   
