@@ -269,10 +269,10 @@ sum(dnds$dNdS > 1) / nrow(dnds)
 Boxplot of dnds by different lineages
 ```{r}
 
-boxplot(covid_specific$delta_N~covid_specific$pangolin_lineage,
-  ylim = c(-50,50),
+boxplot(covid_specific$count_N~covid_specific$pangolin_lineage,
+  ylim = c(20,60),
   ylab = "delta_N",
-  main = "delta_N by linegages")
+  main = "delta_N by lineages")
 ```
 
 t-test on distribution
