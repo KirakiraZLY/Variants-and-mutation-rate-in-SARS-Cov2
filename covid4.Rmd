@@ -292,8 +292,8 @@ Delta and Omicron
 ```{r}
 
 test.stat1 <- abs(
-  mean(covid_specific$delta_N[covid_specific$VarShort == "VOC Omicron GRA"]) -
-    mean(covid_specific$delta_N[covid_specific$VarShort == "VOC Delta GK"]))
+  mean(covid_specific$count_N[covid_specific$VarShort == "VOC Omicron GRA"]) -
+    mean(covid_specific$count_N[covid_specific$VarShort == "VOC Delta GK"]))
 test.stat1
 covid_specific <- covid_specific[covid_specific$VarShort == c("VOC Omicron GRA","VOC Delta GK"),]
 
@@ -302,7 +302,7 @@ n <- length(covid_specific$VarShort)
 n
 
 B <- 1000 # num of bs samples
-variable <- covid_specific$delta_N
+variable <- covid_specific$count_N
 
 BootstrapSample <- matrix(sample(variable, size = n * B, replace = TRUE),
                           nrow = n, ncol = B)
@@ -324,6 +324,46 @@ round(Boot.test.stat1[1:20],1)
 mean(Boot.test.stat1 >= test.stat1)
 
 plot(density(Boot.test.stat1),
-     xlab = expression(group("|",bar(Yc) - bar(Ym), "|")))
+     xlab = expression(group("|",bar(Yc) - bar(Ym), "|")),
+     main = "mean t-test on Count_N of Delta & Omicron")
+```
+
+Targeting on Delta_S
+```{r}
+test.stat1 <- abs(
+  mean(covid_specific$count_S[covid_specific$VarShort == "VOC Omicron GRA"]) -
+    mean(covid_specific$count_S[covid_specific$VarShort == "VOC Delta GK"]))
+test.stat1
+covid_specific <- covid_specific[covid_specific$VarShort == c("VOC Omicron GRA","VOC Delta GK"),]
+
+set.seed(114514)
+n <- length(covid_specific$VarShort)
+n
+
+B <- 1000 # num of bs samples
+variable <- covid_specific$count_S
+
+BootstrapSample <- matrix(sample(variable, size = n * B, replace = TRUE),
+                          nrow = n, ncol = B)
+dim(BootstrapSample)
+
+# Init vectors to stor the TEST-STATS
+Boot.test.stat1 <- rep(0,B)
+Boot.test.stat2 <- rep(0,B)
+
+for (i in 1:B) {
+  Boot.test.stat1[i] <- abs(mean(BootstrapSample[1:n/2,i]) -
+                              mean(BootstrapSample[floor(n/2+1):n,i]))
+  
+  Boot.test.stat2[i] <- abs(median(BootstrapSample[1:n/2,i]) -
+                              median(BootstrapSample[floor(n/2+1):n,i]))
+}
+
+round(Boot.test.stat1[1:20],1)
+mean(Boot.test.stat1 >= test.stat1)
+
+plot(density(Boot.test.stat1),
+     xlab = expression(group("|",bar(Yc) - bar(Ym), "|")),
+     main = "mean t-test on count_S of Delta & Omicron")
 ```
 
