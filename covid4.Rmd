@@ -444,3 +444,49 @@ ggplot(dnds_multiple, mapping = aes(x = dnds_multiple$VarShort, y = dnds_multipl
 # dnds[dnds$VarShort == "XBB",]$dNdS
 ```
 
+Bootstrapping
+BA.4 and BA.5
+```{r}
+
+test.stat1 <- mean(covid_specific$count_N[covid_specific$pangolin_lineage == "BA.4"]) -
+    mean(covid_specific$count_N[covid_specific$pangolin_lineage == "BA.5"])
+test.stat1
+
+
+covid_specific <- covid_specific[covid_specific$pangolin_lineage == c("BA.4","BA.5"),]
+# covid_specific$VarShort[covid_specific$`Patient age` > 40] = "VOC Delta GK 2"
+
+
+
+set.seed(114514)
+n <- length(covid_specific$pangolin_lineage)
+n
+
+B <- 1000 # num of bs samples
+variable <- covid_specific$count_N
+
+BootstrapSample <- matrix(sample(variable, size = n * B, replace = TRUE),
+                          nrow = n, ncol = B)
+dim(BootstrapSample)
+
+# Init vectors to stor the TEST-STATS
+Boot.test.stat1 <- rep(0,B)
+Boot.test.stat2 <- rep(0,B)
+
+for (i in 1:B) {
+  Boot.test.stat1[i] <- mean(BootstrapSample[1:n/2,i]) -
+                              mean(BootstrapSample[floor(n/2+1):n,i])
+  
+  Boot.test.stat2[i] <- median(BootstrapSample[1:n/2,i]) -
+                              median(BootstrapSample[floor(n/2+1):n,i])
+}
+
+round(Boot.test.stat1[1:20],1)
+mean(Boot.test.stat1 < test.stat1)
+
+plot(density(Boot.test.stat1),
+     xlab = expression(bar(Yc) - bar(Ym)),
+     main = "mean t-test on Count_N of Delta & Omicron")
+```
+
+Separate BA.2 by date
