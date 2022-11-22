@@ -242,6 +242,28 @@ for(i in 1: length(Delta_N_aa$Var1)){
 
 ```
 
+
+```{r}
+Delta_S_count <- list()
+tb_D_S <- list()
+D_S_freq <- list()
+
+for(i in 1: length(Delta_S_aa$Var1)){
+  Delta_S_count[[i]] <- filter(Delta, aa_change == Delta_S_aa$Var1[i])
+  
+  
+  tb_D_S[[i]] <- table(Delta_S_count[[i]]$date)
+  tb_D_S[[i]] <- data.frame(tb_D_S[[i]])
+
+  names(tb_D_S[[i]]) <- c("date","num")
+
+  D_S_freq[[i]] <- merge(tb_D_S[[i]],tb2,by = "date")
+  D_S_freq[[i]]["Freq"] <- D_S_freq[[i]]$num / D_S_freq[[i]]$num2
+  
+  D_S_sd[i] <- sd(D_S_freq[[i]]$Freq)
+}
+```
+
 ```{r}
 #Delta_N_aa <- filter(Delta_N_aa, Freq > 51.142)
 #Delta_S_aa <- filter(Delta_S_aa, Freq > 51.142)
