@@ -1,0 +1,308 @@
+---
+title: "PiB"
+author: "Jinqi Duan"
+date: "2022/9/16"
+output: html_document
+---
+
+```{r}
+```
+
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+```
+Read file
+```{r}
+filename <- file.choose()
+covid <- readRDS(filename)
+```
+
+
+```{r}
+df <- covid
+```
+
+Modify on file
+```{r}
+
+# covid$country[covid$country == 'Taiwan'] <- 'Taiwan Province of China'
+
+covid$VarShort[covid$Variant == 'VOC Omicron GRA (B.1.1.529+BA.*) first detected in Botswana/Hong Kong/South Africa']  <- 'VOC Omicron GRA'
+covid$VarShort[covid$Variant == 'VOC Alpha GRY (B.1.1.7+Q.*) first detected in the UK']  <- 'VOC Alpha GRY'
+covid$VarShort[covid$Variant == 'VOC Delta GK (B.1.617.2+AY.*) first detected in India']  <- 'VOC Delta GK'
+covid$VarShort[covid$Variant == 'VOC Beta GH/501Y.V2 (B.1.351+B.1.351.2+B.1.351.3) first detected in South Africa']  <- 'VOC Beta GH'
+covid$VarShort[covid$Variant == 'VOI Epsilon GH/452R.V1 (B.1.429+B.1.427) first detected in USA/California']  <- 'VOI Epsilon GH'
+covid$VarShort[covid$Variant == 'VOC Gamma GR/501Y.V3 (P.1+P.1.*) first detected in Brazil/Japan']  <- 'VOC Gamma GR'
+covid$VarShort[covid$Variant == 'VUM GH/490R (B.1.640+B.1.640.*) first detected in Congo/France']  <- 'VUM GH'
+covid$VarShort[covid$Variant == 'VOI Zeta GR/484K.V2 (P.2) first detected in Brazil']  <- 'VOI Zeta GR'
+covid$VarShort[covid$Variant == 'VOI Mu GH (B.1.621+B.1.621.1) first detected in Colombia']  <- 'VOI Mu GH'
+covid$VarShort[covid$Variant == 'VOI Iota GH/253G.V1 (B.1.526) first detected in USA/New York']  <- 'VOI Iota GH'
+covid$VarShort[covid$Variant == 'VOI Kappa G/452R.V3 (B.1.617.1) first detected in India']  <- 'VOI Kappa G'
+covid$VarShort[covid$Variant == 'VOI Lambda GR/452Q.V1 (C.37+C.37.1) first detected in Peru']  <- 'VOI Lambda GR'
+covid$VarShort[covid$Variant == 'VOI Eta G/484K.V3 (B.1.525) first detected in UK/Nigeria']  <- 'VOI Eta G'
+covid$VarShort[covid$Variant == 'VOI Theta GR/1092K.V1 (P.3) first detected in the Philippines']  <- 'VOI Theta GR'
+#covid <- filter(covid,covid$n_total != 0)
+# colnames(covid)[names(covid) == 'AA Substitutions'] <- "AASubstitutions" 
+saveRDS(covid, file = filename)
+
+
+```
+
+
+
+```{r}
+colnames(covid)[names(covid) == 'AA Substitutions'] <- "AASubstitutions" 
+colnames(covid)[names(covid) == 'GC-Content'] <- "GCContent"
+# saveRDS(covid, file = filename)
+```
+
+
+1. Some plots based on !annotated
+```{r}
+
+set.seed(3373)
+covid_small <- covid[sample(nrow(covid), 10000, replace = FALSE),]
+ggplot(data = covid_small, mapping = aes(x = date, y = n_total/seq_length, col = region)) +
+  geom_point() +
+  xlab('date')
+
+```
+
+
+```{r}
+covid_do <- covid[covid$VarShort == c("VOC Delta GK", "VOC Omicron GRA"),]
+covid_do <- filter(covid_do, count_N < 100 , count_S < 100)
+
+covid_d <- covid_do[covid_do$VarShort == c("VOC Delta GK"),]
+covid_o <- covid_do[covid_do$VarShort == c("VOC Omicron GRA"),]
+```
+
+
+```{r}
+#filter(covid, VarShort == "VOC Delta GK","VOC Omicron GRA" )
+
+ggplot(covid_do, mapping = aes( x = date, y = count_N, col = VarShort)) +
+         geom_point() +
+         xlab('date')
+
+ggplot(covid_do, mapping = aes( x = date, y = count_S, col = region)) +
+         geom_point() +
+         xlab('date')
+
+```
+
+```{r}
+filename2 <- file.choose()
+covid_ind <- readRDS(filename2)
+```
+
+```{r}
+covid_do_sub <- covid_do[,c("id","date","VarShort","pangolin_lineage")] 
+covid_ind_sub <- covid_ind[,c("id","position","aa_change","type")]
+covid_do_ind <- merge(covid_do_sub,covid_ind_sub,by = "id")
+```
+
+```{r}
+Delta <- covid_do_ind[covid_do_ind$VarShort == c("VOC Delta GK"),]
+Omicron <- covid_do_ind[covid_do_ind$VarShort == c("VOC Omicron GRA"),]
+
+Delta_N <- Delta[Delta$type == c("N"),]
+Omicron_N <- Omicron[Omicron$type == c("N"),]
+
+Delta_S <- Delta[Delta$type == c("S"),]
+Omicron_S <- Omicron[Omicron$type == c("S"),]
+```
+
+
+计算Freq
+all sample，不分d、o
+```{r}
+tb1 <- table(covid_do$date)
+tb2 <- table(covid_do_ind$date)
+
+tb1 <- data.frame(tb1)
+tb2 <- data.frame(tb2)
+
+names(tb1) <- c("date","num1")
+names(tb2) <- c("date","num2")
+
+DO_freq <- merge(tb1,tb2,by = "date")
+DO_freq["Freq"] <- DO_freq$num1 / DO_freq$num2
+```
+
+do分别计算freq
+```{r}
+tb_d <- table(covid_d$date)
+tb_o <- table(covid_o$date)
+
+tb_d <- data.frame(tb_d)
+tb_o <- data.frame(tb_o)
+
+names(tb_d) <- c("date","num1")
+names(tb_o) <- c("date","num2")
+
+D_freq <- merge(tb_d,tb2,by = "date")
+D_freq["Freq"] <- D_freq$num1 / D_freq$num2
+
+O_freq <- merge(tb_o,tb2,by = "date")
+O_freq["Freq"] <- O_freq$num2.x / O_freq$num2.y
+```
+
+```{r}
+plot(D_freq$date, D_freq$Freq)
+plot(O_freq$date, O_freq$Freq)
+```
+
+
+
+
+```{r}
+Delta_N_aa <- table(Delta_N$aa_change)
+Delta_N_aa <- data.frame(Delta_N_aa)
+Delta_N_aa <- arrange(Delta_N_aa, desc(Freq))
+```
+
+```{r}
+Omicron_N_aa <- table(Omicron_N$aa_change) 
+Omicron_N_aa <- data.frame(Omicron_N_aa)
+Omicron_N_aa <- arrange(Omicron_N_aa ,desc(Freq))
+```
+
+```{r}
+
+Delta_S_aa <- table(Delta_S$aa_change)
+Delta_S_aa <- data.frame(Delta_S_aa)
+Delta_S_aa <- arrange(Delta_S_aa, desc(Freq))
+```
+
+```{r}
+Omicron_S_aa <- table(Omicron_S$aa_change) 
+Omicron_S_aa <- data.frame(Omicron_S_aa)
+Omicron_S_aa <- arrange(Omicron_S_aa ,desc(Freq))
+```
+
+##Total sample of Delta or Omicron 
+```{r}
+total_delta = count(covid_do[covid_do$VarShort == c("VOC Delta GK"),]) #51142
+total_Omicron = count(covid_do[covid_do$VarShort == c("VOC Omicron GRA"),]) #68157
+```
+
+分别计算Delta中non-syn的freq
+(small test)
+```{r}
+
+Delta_N_count <- list()
+tb_D_N <- list()
+D_N_freq <- list()
+D_N_sd <- list()
+
+for(i in 1:3){
+  Delta_N_count[[i]] <- filter(Delta, aa_change == Delta_N_aa$Var1[i])
+  
+  
+  tb_D_N[[i]] <- table(Delta_N_count[[i]]$date)
+  tb_D_N[[i]] <- data.frame(tb_D_N[[i]])
+
+  names(tb_D_N[[i]]) <- c("date","num")
+
+  D_N_freq[[i]] <- merge(tb_D_N[[i]],tb2,by = "date")
+  D_N_freq[[i]]["Freq"] <- D_N_freq[[i]]$num / D_N_freq[[i]]$num2
+  
+  D_N_sd[i] <- sd(D_N_freq[[i]]$Freq)
+}
+
+```
+
+```{r}
+
+Delta_N_count <- list()
+tb_D_N <- list()
+D_N_freq <- list()
+
+for(i in 1: length(Delta_N_aa$Var1)){
+  Delta_N_count[[i]] <- filter(Delta, aa_change == Delta_N_aa$Var1[i])
+  
+  
+  tb_D_N[[i]] <- table(Delta_N_count[[i]]$date)
+  tb_D_N[[i]] <- data.frame(tb_D_N[[i]])
+
+  names(tb_D_N[[i]]) <- c("date","num")
+
+  D_N_freq[[i]] <- merge(tb_D_N[[i]],tb2,by = "date")
+  D_N_freq[[i]]["Freq"] <- D_N_freq[[i]]$num / D_N_freq[[i]]$num2
+  
+  D_N_sd[i] <- sd(D_N_freq[[i]]$Freq)
+}
+
+
+
+
+```
+
+```{r}
+#Delta_N_aa <- filter(Delta_N_aa, Freq > 51.142)
+#Delta_S_aa <- filter(Delta_S_aa, Freq > 51.142)
+
+#Omicron_N_aa <- filter(Omicron_N_aa, Freq > 68.157)
+#Omicron_S_aa <- filter(Omicron_S_aa, Freq > 68.157)
+
+#ggplot(Delta, mapping = aes(date,))
+```
+
+
+
+
+
+```{r}
+
+```
+
+
+```{r}
+#df_new <- filter(df, date != NA)
+#df_new <- filter(df, date == NA)
+#df_new <- na.omit(df)
+sum(is.na(covid$date))
+
+```
+
+
+
+```{r}
+
+
+
+```
+
+
+
+```{r}
+ggplot(df, mapping = aes (date, n_total)) +
+  geom_point(aes(colours(factor(region))))
+```
+
+```{r}
+
+
+```
+
+```{r}
+
+
+```
+
+```{r}
+colnames(df)[names(df) == 'AA Substitutions'] <- "AASubstitutions" 
+colnames(df)[names(df) == 'GC-Content'] <- "GCContent"
+```
+
+```{r}
+
+```
+
+
+
+
