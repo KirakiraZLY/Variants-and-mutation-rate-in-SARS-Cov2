@@ -121,9 +121,7 @@ covid_n_2 <- covid_ns[covid_ns$VarShort == var_name,]
 fitted_N =  covid_n_2 %>% group_by(pangolin_lineage) %>% do(model = lm(count_N ~ date, data = .))
 # plot(fitted_models$model)
 # fitted_N$model
-```
 
-```{r}
 ######### Linear Regression on S
 covid_s_2 <- covid_ns[covid_ns$VarShort == var_name,]
 fitted_S =  covid_s_2 %>% group_by(pangolin_lineage) %>% do(model = lm(count_S ~ date, data = .))
@@ -189,7 +187,7 @@ dnds[dnds$pangolin_lineage == "BA.2.1",]$dNdS
 
 FOR MULTIPLE LINEAGES
 ```{r}
-lineage_name = c("Delta","BA.1","BA.2","BA.2.1","BA.2.75","BA.4","BA.5","BA.5.2.1","BF.7","BQ.1","BQ.1.1","BN.1","XBB")
+lineage_name = c("Delta","BA.1","BA.2","BA.2.12.1","BA.2.75","BA.4","BA.5","BA.5.2.1","BF.7","BQ.1","BQ.1.1","BN.1","XBB")
 # covid_specific <- covid_2 %>% filter(pangolin_lineage == lineage_name)
 # covid_4 <- dnds[dnds$pangolin_lineage == lineage_name,]
 dnds_multiple_dnds <- list()
@@ -220,10 +218,13 @@ ggplot(dnds_multiple, mapping = aes(x = dnds_multiple$pangolin_lineage, y = dnds
   geom_bar(position="dodge",stat="identity") +
   labs(title = "dNdS_new in different Concern Lineages") +
   ylim(0,5)
+
+# dnds[dnds$pangolin_lineage == "XBB",]$dNdS
 ```
 Distribution of a specific lineage
 ```{r}
 lineage_name = lineage_name
+# lineage_name = c("BQ.1")
 # covid_specific <- covid_2 %>% filter(pangolin_lineage == lineage_name)
 
 covid_specific <- covid_n_2[covid_n_2$pangolin_lineage == lineage_name,]
@@ -291,11 +292,15 @@ Bootstrapping
 Delta and Omicron
 ```{r}
 
-test.stat1 <- abs(
-  mean(covid_specific$count_N[covid_specific$VarShort == "VOC Omicron GRA"]) -
-    mean(covid_specific$count_N[covid_specific$VarShort == "VOC Delta GK"]))
+test.stat1 <- mean(covid_specific$count_N[covid_specific$VarShort == "VOC Omicron GRA"]) -
+    mean(covid_specific$count_N[covid_specific$VarShort == "VOC Delta GK"])
 test.stat1
+
+
 covid_specific <- covid_specific[covid_specific$VarShort == c("VOC Omicron GRA","VOC Delta GK"),]
+# covid_specific$VarShort[covid_specific$`Patient age` > 40] = "VOC Delta GK 2"
+
+
 
 set.seed(114514)
 n <- length(covid_specific$VarShort)
@@ -313,26 +318,25 @@ Boot.test.stat1 <- rep(0,B)
 Boot.test.stat2 <- rep(0,B)
 
 for (i in 1:B) {
-  Boot.test.stat1[i] <- abs(mean(BootstrapSample[1:n/2,i]) -
-                              mean(BootstrapSample[floor(n/2+1):n,i]))
+  Boot.test.stat1[i] <- mean(BootstrapSample[1:n/2,i]) -
+                              mean(BootstrapSample[floor(n/2+1):n,i])
   
-  Boot.test.stat2[i] <- abs(median(BootstrapSample[1:n/2,i]) -
-                              median(BootstrapSample[floor(n/2+1):n,i]))
+  Boot.test.stat2[i] <- median(BootstrapSample[1:n/2,i]) -
+                              median(BootstrapSample[floor(n/2+1):n,i])
 }
 
 round(Boot.test.stat1[1:20],1)
-mean(Boot.test.stat1 >= test.stat1)
+mean(Boot.test.stat1 < test.stat1)
 
 plot(density(Boot.test.stat1),
-     xlab = expression(group("|",bar(Yc) - bar(Ym), "|")),
+     xlab = expression(bar(Yc) - bar(Ym)),
      main = "mean t-test on Count_N of Delta & Omicron")
 ```
 
 Targeting on Delta_S
 ```{r}
-test.stat1 <- abs(
-  mean(covid_specific$count_S[covid_specific$VarShort == "VOC Omicron GRA"]) -
-    mean(covid_specific$count_S[covid_specific$VarShort == "VOC Delta GK"]))
+test.stat1 <-   mean(covid_specific$count_S[covid_specific$VarShort == "VOC Omicron GRA"]) -
+    mean(covid_specific$count_S[covid_specific$VarShort == "VOC Delta GK"])
 test.stat1
 covid_specific <- covid_specific[covid_specific$VarShort == c("VOC Omicron GRA","VOC Delta GK"),]
 
@@ -352,18 +356,91 @@ Boot.test.stat1 <- rep(0,B)
 Boot.test.stat2 <- rep(0,B)
 
 for (i in 1:B) {
-  Boot.test.stat1[i] <- abs(mean(BootstrapSample[1:n/2,i]) -
-                              mean(BootstrapSample[floor(n/2+1):n,i]))
+  Boot.test.stat1[i] <- mean(BootstrapSample[1:n/2,i]) -
+                              mean(BootstrapSample[floor(n/2+1):n,i])
   
-  Boot.test.stat2[i] <- abs(median(BootstrapSample[1:n/2,i]) -
-                              median(BootstrapSample[floor(n/2+1):n,i]))
+  Boot.test.stat2[i] <- median(BootstrapSample[1:n/2,i]) -
+                              median(BootstrapSample[floor(n/2+1):n,i])
 }
 
 round(Boot.test.stat1[1:20],1)
 mean(Boot.test.stat1 >= test.stat1)
 
 plot(density(Boot.test.stat1),
-     xlab = expression(group("|",bar(Yc) - bar(Ym), "|")),
+     xlab = expression(bar(Yc) - bar(Ym)),
      main = "mean t-test on count_S of Delta & Omicron")
+```
+
+dnds on important variants
+```{r}
+# lineage_name = c("Delta","BA.1","BA.2","BA.2.1","BA.2.75","BA.4","BA.5","BA.5.2.1","BF.7","BQ.1","BQ.1.1","BN.1","XBB")
+var_name = c("VOC Alpha GRY","VOC Gamma GR","VOC Delta GK","VOC Omicron GRA")
+
+# var_name = c("VOC Omicron GRA", "VOC Delta GK")
+# var_name = c("VOC Delta GK")
+
+covid_n_2 <- covid_ns[covid_ns$VarShort == var_name,]
+
+fitted_N =  covid_n_2 %>% group_by(VarShort) %>% do(model = lm(count_N ~ date, data = .))
+# plot(fitted_models$model)
+# fitted_N$model
+
+######### Linear Regression on S
+covid_s_2 <- covid_ns[covid_ns$VarShort == var_name,]
+fitted_S =  covid_s_2 %>% group_by(VarShort) %>% do(model = lm(count_S ~ date, data = .))
+# plot(fitted_models$model)
+# fitted_S$model
+# fitted_S <- lm(count_S ~ date,covid_s_2, subset = (grp == "pango"))
+# fitted_S
+
+
+a <- list()
+for (i in 1:nrow(fitted_N)) {
+  a[i] <- fitted_N[[2]][[i]][["coefficients"]][2] / fitted_S[[2]][[i]][["coefficients"]][2]
+}
+# dnds <- data.frame(matrix(nrow=0,ncol=2))
+dnds <- data.frame(fitted_N$VarShort)
+names(dnds) <- c("VarShort")
+dnds$dNdS <- a
+
+# dnds <- dnds[!is.infinite(dnds$dNdS),]
+dnds <- dnds[!is.na(dnds$dNdS),]
+
+
+# dnds <- dnds[!is.na(dnds$dNdS),]
+
+dnds[dnds$VarShort == "VOC Omicron GRA",]$dNdS
+
+# covid_specific <- covid_2 %>% filter(pangolin_lineage == lineage_name)
+# covid_4 <- dnds[dnds$pangolin_lineage == lineage_name,]
+dnds_multiple_dnds <- list()
+dnds_multiple_lineage <- list()
+for (i in 1:length(var_name))
+{
+  dnds_multiple_dnds[i] <- dnds[dnds$VarShort == var_name[i],]$dNdS
+  dnds_multiple_lineage[i] <- dnds[dnds$VarShort == var_name[i],]$VarShort
+}
+dnds_multiple <- data.frame(dnds_multiple_lineage,dnds_multiple_dnds)
+
+# dnds_multiple <- data.frame(dnds_multiple_lineage)
+# names(dnds_multiple) <- c("pangolin_lineage")
+# dnds$dNdS <- dnds_multiple_dnds
+
+dnds_multiple <- cbind(dnds_multiple_lineage,dnds_multiple_dnds)
+dnds_multiple <- as.data.frame(dnds_multiple)
+names(dnds_multiple) <- c("VarShort","dNdS")
+dnds_multiple$dNdS <- as.numeric(dnds_multiple$dNdS)
+dnds_multiple$VarShort <- as.factor(var_name)
+
+dnds_multiple$col<- ifelse(dnds_multiple$dNdS >= 1, 1, 0)
+dnds_multiple$col<-as.factor(dnds_multiple$col)
+dnds_multiple <- dnds_multiple %>%
+  mutate(VarShort = factor(VarShort, levels = var_name))
+
+ggplot(dnds_multiple, mapping = aes(x = dnds_multiple$VarShort, y = dnds_multiple$dNdS, col = dnds_multiple$col, fill = dnds_multiple$col, levels = var_name)) +
+  geom_bar(position="dodge",stat="identity") +
+  labs(title = "dNdS_new in different Concern Lineages")
+
+# dnds[dnds$VarShort == "XBB",]$dNdS
 ```
 
