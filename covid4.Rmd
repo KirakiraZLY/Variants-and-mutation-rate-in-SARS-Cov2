@@ -439,7 +439,7 @@ dnds_multiple <- dnds_multiple %>%
 
 ggplot(dnds_multiple, mapping = aes(x = dnds_multiple$VarShort, y = dnds_multiple$dNdS, col = dnds_multiple$col, fill = dnds_multiple$col, levels = var_name)) +
   geom_bar(position="dodge",stat="identity") +
-  labs(title = "dNdS_new in different Concern Lineages")
+  labs(title = "dNdS_new in different Concern Variants")
 
 # dnds[dnds$VarShort == "XBB",]$dNdS
 ```
@@ -489,4 +489,64 @@ plot(density(Boot.test.stat1),
      main = "mean t-test on Count_N of Delta & Omicron")
 ```
 
-Separate BA.2 by date
+Separate BA.2 by date < Feb.15
+```{r}
+lineage_name = c("Delta","BA.1","BA.2","BA.2.12.1","BA.2.75","BA.4","BA.5","BA.5.2.1","BF.7","BQ.1","BQ.1.1","BN.1","XBB")
+covid_specific_1 <- covid_n_2[covid_n_2$pangolin_lineage == "BA.2",]
+
+ggplot(data = covid_specific_1, mapping = aes(x = date, y = count_N, col = covid_specific_1$pangolin_lineage)) +
+  geom_point() +
+  xlab('date') +
+  labs(title = "count_N") +
+  ylim(25,65) +
+  geom_smooth(color = "black")
+
+```
+```{r}
+covid_specific_1$pangolin_lineage[covid_specific_1$date <= "2022-02-15"] = "BA.2A"
+covid_specific_1$pangolin_lineage[covid_specific_1$date > "2022-02-15"] = "BA.2B"
+
+
+
+test.stat1 <- mean(covid_specific_1$count_N[covid_specific_1$pangolin_lineage == "BA.2A"]) -
+    mean(covid_specific_1$count_N[covid_specific_1$pangolin_lineage == "BA.2B"])
+test.stat1
+
+
+covid_specific_1 <- covid_specific_1[covid_specific_1$pangolin_lineage == c("BA.2A","BA.2B"),]
+# covid_specific$VarShort[covid_specific$`Patient age` > 40] = "VOC Delta GK 2"
+
+
+
+set.seed(114514)
+n <- length(covid_specific_1$pangolin_lineage)
+n
+
+B <- 1000 # num of bs samples
+variable <- covid_specific_1$count_N
+
+BootstrapSample <- matrix(sample(variable, size = n * B, replace = TRUE),
+                          nrow = n, ncol = B)
+dim(BootstrapSample)
+
+# Init vectors to stor the TEST-STATS
+Boot.test.stat1 <- rep(0,B)
+Boot.test.stat2 <- rep(0,B)
+
+for (i in 1:B) {
+  Boot.test.stat1[i] <- mean(BootstrapSample[1:n/2,i]) -
+                              mean(BootstrapSample[floor(n/2+1):n,i])
+  
+  Boot.test.stat2[i] <- median(BootstrapSample[1:n/2,i]) -
+                              median(BootstrapSample[floor(n/2+1):n,i])
+}
+
+round(Boot.test.stat1[1:20],1)
+mean(Boot.test.stat1 < test.stat1)
+
+plot(density(Boot.test.stat1),
+     xlab = expression(bar(Yc) - bar(Ym)),
+     main = "mean t-test on Count_N of Delta & Omicron")
+```
+
+
