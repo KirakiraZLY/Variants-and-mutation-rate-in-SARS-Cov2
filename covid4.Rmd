@@ -265,6 +265,10 @@ Proportion of dnds > 1
 
 sum(dnds$dNdS > 1) / nrow(dnds)
 
+dnds$dNdS <-as.numeric(dnds$dNdS)
+dnds <- dnds[!is.infinite(dnds$dNdS),]
+
+mean(dnds$dNdS)
 ```
 
 Boxplot of dnds by different lineages
@@ -282,7 +286,7 @@ ks.test(covid_specific$delta_N[covid_specific$VarShort == "VOC Omicron GRA"], co
         paired = F) ### T-test on Delta & Omicron
 ```
 ```{r}
-ks.test(covid_specific$delta_N[covid_specific$pangolin_lineage == "BF.7"], covid_specific$delta_N[covid_specific$pangolin_lineage == "BA.5.2.1"], 
+ks.test(covid_specific$delta_N[covid_specific$pangolin_lineage == "XBB"], covid_specific$delta_N[covid_specific$pangolin_lineage == "BQ.1.1"], 
         paired = F)
 
 
@@ -447,13 +451,15 @@ ggplot(dnds_multiple, mapping = aes(x = dnds_multiple$VarShort, y = dnds_multipl
 Bootstrapping
 BA.4 and BA.5
 ```{r}
+covid_specific <- covid_n_2[covid_n_2$pangolin_lineage == lineage_name,]
+covid_specific <- covid_specific[!is.na(covid_specific$delta_N),]
 
-test.stat1 <- mean(covid_specific$count_N[covid_specific$pangolin_lineage == "BA.4"]) -
-    mean(covid_specific$count_N[covid_specific$pangolin_lineage == "BA.5"])
+test.stat1 <- mean(covid_specific$count_N[covid_specific$pangolin_lineage == "XBB"]) -
+    mean(covid_specific$count_N[covid_specific$pangolin_lineage == "BQ.1.1"])
 test.stat1
 
 
-covid_specific <- covid_specific[covid_specific$pangolin_lineage == c("BA.4","BA.5"),]
+covid_specific <- covid_specific[covid_specific$pangolin_lineage == c("XBB","BQ.1.1"),]
 # covid_specific$VarShort[covid_specific$`Patient age` > 40] = "VOC Delta GK 2"
 
 
@@ -486,7 +492,7 @@ mean(Boot.test.stat1 < test.stat1)
 
 plot(density(Boot.test.stat1),
      xlab = expression(bar(Yc) - bar(Ym)),
-     main = "mean t-test on Count_N of Delta & Omicron")
+     main = "mean t-test on Count_N of XBB & BQ.1.1")
 ```
 
 Separate BA.2 by date < Feb.15
@@ -546,7 +552,7 @@ mean(Boot.test.stat1 < test.stat1)
 
 plot(density(Boot.test.stat1),
      xlab = expression(bar(Yc) - bar(Ym)),
-     main = "mean t-test on Count_N of Delta & Omicron")
+     main = "mean t-test on Count_N of BA.2A & BA.2B")
 ```
 
 
