@@ -31,6 +31,7 @@ covid_2 <- covid_2[!is.na(covid_2$date),]
 ## Week 12
 Calculate real dn/ds
 ```{r}
+covid_2$VarShort[is.na(covid_2$VarShort)] <- "Origin"
 covid_ns <- covid_2 %>% group_by(pangolin_lineage) %>% arrange(date) %>% mutate(no = row_number(date)) ######### "no" here used to delete 5% data, later will be factor for >1 or not
 
 covid_ns$pangolin_lineage[which(covid_ns$VarShort == "VOC Delta GK")] <- "Delta"
@@ -163,7 +164,7 @@ For more lineages
 a <- list()
 for (i in 1:nrow(fitted_N)) {
   a[i] <- fitted_N[[2]][[i]][["coefficients"]][2] / fitted_S[[2]][[i]][["coefficients"]][2]
-}
+}  ### bootstrap of dnds
 # dnds <- data.frame(matrix(nrow=0,ncol=2))
 dnds <- data.frame(fitted_N$pangolin_lineage)
 names(dnds) <- c("pangolin_lineage")
@@ -217,7 +218,7 @@ dnds_multiple <- dnds_multiple %>%
 ggplot(dnds_multiple, mapping = aes(x = dnds_multiple$pangolin_lineage, y = dnds_multiple$dNdS, col = dnds_multiple$col, fill = dnds_multiple$col, levels = lineage_name)) +
   geom_bar(position="dodge",stat="identity") +
   labs(title = "dNdS_new in different Concern Lineages") +
-  ylim(0,5)
+  ylim(0,7)
 
 # dnds[dnds$pangolin_lineage == "XBB",]$dNdS
 ```
@@ -267,8 +268,11 @@ sum(dnds$dNdS > 1) / nrow(dnds)
 
 dnds$dNdS <-as.numeric(dnds$dNdS)
 dnds <- dnds[!is.infinite(dnds$dNdS),]
+dnds <- dnds[dnds$dNdS < 10,]
+dnds <- dnds[dnds$dNdS > -10,]
 
 mean(dnds$dNdS)
+
 ```
 
 Boxplot of dnds by different lineages
@@ -378,7 +382,7 @@ plot(density(Boot.test.stat1),
 dnds on important variants
 ```{r}
 # lineage_name = c("Delta","BA.1","BA.2","BA.2.1","BA.2.75","BA.4","BA.5","BA.5.2.1","BF.7","BQ.1","BQ.1.1","BN.1","XBB")
-var_name = c("VOC Alpha GRY","VOC Gamma GR","VOC Delta GK","VOC Omicron GRA")
+var_name = c("VOI Epsilon GH","VOC Alpha GRY","VOC Gamma GR","VOC Delta GK","VOC Omicron GRA")
 
 # var_name = c("VOC Omicron GRA", "VOC Delta GK")
 # var_name = c("VOC Delta GK")
@@ -396,6 +400,17 @@ fitted_S =  covid_s_2 %>% group_by(VarShort) %>% do(model = lm(count_S ~ date, d
 # fitted_S$model
 # fitted_S <- lm(count_S ~ date,covid_s_2, subset = (grp == "pango"))
 # fitted_S
+
+covid_n_origin <- covid_n_2 %>% filter(VarShort == "Origin")
+ggplot(data = covid_n_origin, mapping = aes(x = date, y = count_N)) +
+  geom_point() +
+  xlab('date') +
+  labs(title = "count_N")
+ggplot(data = covid_n_origin, mapping = aes(x = date, y = count_S)) +
+  geom_point() +
+  xlab('date') +
+  labs(title = "count_S")
+
 
 
 a <- list()
@@ -449,17 +464,17 @@ ggplot(dnds_multiple, mapping = aes(x = dnds_multiple$VarShort, y = dnds_multipl
 ```
 
 Bootstrapping
-BA.4 and BA.5
+BQ.1.1 and XBB count_S
 ```{r}
 covid_specific <- covid_n_2[covid_n_2$pangolin_lineage == lineage_name,]
 covid_specific <- covid_specific[!is.na(covid_specific$delta_N),]
 
-test.stat1 <- mean(covid_specific$count_N[covid_specific$pangolin_lineage == "XBB"]) -
-    mean(covid_specific$count_N[covid_specific$pangolin_lineage == "BQ.1.1"])
+test.stat1 <- mean(covid_specific$count_S[covid_specific$pangolin_lineage == "BQ.1.1"]) -
+    mean(covid_specific$count_S[covid_specific$pangolin_lineage == "XBB"])
 test.stat1
 
 
-covid_specific <- covid_specific[covid_specific$pangolin_lineage == c("XBB","BQ.1.1"),]
+covid_specific <- covid_specific[covid_specific$pangolin_lineage == c("XBB","BQ.1"),]
 # covid_specific$VarShort[covid_specific$`Patient age` > 40] = "VOC Delta GK 2"
 
 
@@ -469,7 +484,7 @@ n <- length(covid_specific$pangolin_lineage)
 n
 
 B <- 1000 # num of bs samples
-variable <- covid_specific$count_N
+variable <- covid_specific$count_S
 
 BootstrapSample <- matrix(sample(variable, size = n * B, replace = TRUE),
                           nrow = n, ncol = B)
@@ -492,7 +507,7 @@ mean(Boot.test.stat1 < test.stat1)
 
 plot(density(Boot.test.stat1),
      xlab = expression(bar(Yc) - bar(Ym)),
-     main = "mean t-test on Count_N of XBB & BQ.1.1")
+     main = "mean t-test on Count_S of XBB & BQ.1.1")
 ```
 
 Separate BA.2 by date < Feb.15
@@ -508,6 +523,7 @@ ggplot(data = covid_specific_1, mapping = aes(x = date, y = count_N, col = covid
   geom_smooth(color = "black")
 
 ```
+
 ```{r}
 covid_specific_1$pangolin_lineage[covid_specific_1$date <= "2022-02-15"] = "BA.2A"
 covid_specific_1$pangolin_lineage[covid_specific_1$date > "2022-02-15"] = "BA.2B"
@@ -555,4 +571,29 @@ plot(density(Boot.test.stat1),
      main = "mean t-test on Count_N of BA.2A & BA.2B")
 ```
 
+
+# Week 14
+bootstrap of count_N
+```{r}
+
+library(boot)
+set.seed(1234)
+
+covid_specific_1 <- covid_specific[covid_specific$pangolin_lineage == c("BA.2"),]
+covid_specific_1 <- covid_specific_1[,c("date","count_N")]
+pd_N   <- covid_specific_1
+
+# pd$b <- 0
+for (i in 1:1000) {
+  j    <- sample(1:nrow(covid_specific_1), replace = TRUE)
+  nd   <- covid_specific_1[j,]
+  # nd$b <- i
+  pd_N   <- rbind(pd_N, nd)
+  
+}
+
+ggplot(pd_N, mapping = aes(x=date, y=count_N)) + 
+  geom_point() + 
+  geom_smooth(method = "lm")
+```
 
