@@ -13,6 +13,7 @@ library(data.table)
 library(DBI)
 library(RSQLite)
 library(scales)
+library(lubridate)
 library(data.table)
 ```
 
@@ -117,15 +118,15 @@ covid_ns <- covid_ns[!is.na(covid_ns$VarShort),]
 var_name = c("VOC Omicron GRA", "VOC Delta GK")
 # var_name = c("VOC Delta GK")
 
-covid_n_2 <- covid_ns[covid_ns$VarShort == var_name,]
+covid_ns_2 <- covid_ns[covid_ns$VarShort == var_name,]
 
-fitted_N =  covid_n_2 %>% group_by(pangolin_lineage) %>% do(model = lm(count_N ~ date, data = .))
+fitted_N =  covid_ns_2 %>% group_by(pangolin_lineage) %>% do(model = lm(count_N ~ date, data = .))
 # plot(fitted_models$model)
 # fitted_N$model
 
 ######### Linear Regression on S
-covid_s_2 <- covid_ns[covid_ns$VarShort == var_name,]
-fitted_S =  covid_s_2 %>% group_by(pangolin_lineage) %>% do(model = lm(count_S ~ date, data = .))
+# covid_s_2 <- covid_ns[covid_ns$VarShort == var_name,]
+fitted_S =  covid_ns_2 %>% group_by(pangolin_lineage) %>% do(model = lm(count_S ~ date, data = .))
 # plot(fitted_models$model)
 # fitted_S$model
 # fitted_S <- lm(count_S ~ date,covid_s_2, subset = (grp == "pango"))
@@ -176,7 +177,7 @@ dnds <- dnds[!is.na(dnds$dNdS),]
 
 # dnds <- dnds[!is.na(dnds$dNdS),]
 
-dnds[dnds$pangolin_lineage == "BA.2.1",]$dNdS
+dnds[dnds$pangolin_lineage == "BA.2",]$dNdS
 ####### Haven't consider p<0.01
 
 
@@ -224,11 +225,11 @@ ggplot(dnds_multiple, mapping = aes(x = dnds_multiple$pangolin_lineage, y = dnds
 ```
 Distribution of a specific lineage
 ```{r}
-lineage_name = lineage_name
+# lineage_name = lineage_name
 # lineage_name = c("BQ.1")
 # covid_specific <- covid_2 %>% filter(pangolin_lineage == lineage_name)
 
-covid_specific <- covid_n_2[covid_n_2$pangolin_lineage == lineage_name,]
+covid_specific <- covid_ns_2[covid_ns_2$pangolin_lineage == lineage_name,]
 covid_specific <- covid_specific[!is.na(covid_specific$delta_N),]
 
 dnds[dnds$pangolin_lineage == lineage_name,]$dNdS
@@ -257,7 +258,24 @@ ggplot(data = covid_specific, mapping = aes(x = date, y = count_S, col = covid_s
   labs(title = "count_S")
 
 ```
+BA.2
+```{r}
 
+covid_specific_2 <- covid_specific[covid_specific$pangolin_lineage == "BA.2",]
+ggplot(data = covid_specific_2, mapping = aes(x = date, y = count_N)) +
+  geom_point() +
+  xlab('date') +
+  labs(title = "count_N BA.2") +
+  geom_smooth(method = lm)
+
+covid_specific_2 <- covid_specific[covid_specific$pangolin_lineage == "BA.2",]
+ggplot(data = covid_specific_2, mapping = aes(x = date, y = count_S)) +
+  geom_point() +
+  xlab('date') +
+  labs(title = "count_S BA.2") +
+  geom_smooth(method = lm)
+
+```
 
 Week 13
 
@@ -271,8 +289,7 @@ dnds <- dnds[!is.infinite(dnds$dNdS),]
 dnds <- dnds[dnds$dNdS < 10,]
 dnds <- dnds[dnds$dNdS > -10,]
 
-mean(dnds$dNdS)
-
+# print()mean(dnds$dNdS)
 ```
 
 Boxplot of dnds by different lineages
@@ -573,27 +590,202 @@ plot(density(Boot.test.stat1),
 
 
 # Week 14
-bootstrap of count_N
+bootstrap of count_N and count_S   
+pd_N pd_S   
 ```{r}
 
-library(boot)
+# library(boot)
 set.seed(1234)
 
 covid_specific_1 <- covid_specific[covid_specific$pangolin_lineage == c("BA.2"),]
-covid_specific_1 <- covid_specific_1[,c("date","count_N")]
-pd_N   <- covid_specific_1
+covid_specific_1 <- covid_specific_1[,c("date","count_N", "count_S")]
+pd_NS   <- covid_specific_1
 
 # pd$b <- 0
-for (i in 1:1000) {
+for (i in 1:5000) {
   j    <- sample(1:nrow(covid_specific_1), replace = TRUE)
   nd   <- covid_specific_1[j,]
   # nd$b <- i
-  pd_N   <- rbind(pd_N, nd)
+  pd_NS   <- rbind(pd_NS, nd)
+  
+  if(i%%500==0) {   # Progress tracker
+    cat(i, "\n")       
+    flush.console()
+  }
   
 }
 
-ggplot(pd_N, mapping = aes(x=date, y=count_N)) + 
+ggplot(pd_NS, mapping = aes(x=date, y=count_N)) + 
   geom_point() + 
-  geom_smooth(method = "lm")
+  geom_smooth(method = "lm") +
+  labs(title = "Count_N XBB bs5000")
+
+# covid_specific_1 <- covid_specific[covid_specific$pangolin_lineage == c("BA.2"),]
+# covid_specific_1 <- covid_specific_1[,c("date","count_S")]
+# pd_S   <- covid_specific_1
+# 
+# # pd$b <- 0
+# for (i in 1:1000) {
+#   j    <- sample(1:nrow(covid_specific_1), replace = TRUE)
+#   nd   <- covid_specific_1[j,]
+#   # nd$b <- i
+#   pd_S   <- rbind(pd_S, nd)
+#   
+# }
+
+ggplot(pd_NS, mapping = aes(x=date, y=count_S)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  labs(title = "Count_S XBB bs5000")
+
+
+######################################################  Calculate dnds
+
+fitted_N <- lm(data = pd_NS, count_N ~ date)
+
+######### Linear Regression on S
+fitted_S <- lm(data = pd_NS, count_S ~ date)
+
+fitted_N[["coefficients"]][2] / fitted_S[["coefficients"]][2]
+
+```
+
+Calculate dnds
+```{r}
+
+fitted_N <- lm(data = pd_NS, count_N ~ date)
+
+######### Linear Regression on S
+fitted_S <- lm(data = pd_NS, count_S ~ date)
+
+fitted_N[["coefficients"]][2] / fitted_S[["coefficients"]][2]
+```
+
+BA.2A and BA.2B(only when lineage == "BA.2")
+```{r}
+covid_specific_1 <- covid_specific[covid_specific$pangolin_lineage == c("BA.2"),]
+covid_specific_1$pangolin_lineage[covid_specific_1$date <= "2022-02-15"] = "BA.2A"
+covid_specific_1$pangolin_lineage[covid_specific_1$date > "2022-02-15"] = "BA.2B"
+
+set.seed(1234)
+
+covid_specific_2 <- covid_specific_1[covid_specific_1$pangolin_lineage == c("BA.2B"),]
+covid_specific_2 <- covid_specific_2[,c("date","count_N","count_S")]
+pd_NS   <- covid_specific_2
+
+# pd$b <- 0
+for (i in 1:2000) {
+  j    <- sample(1:nrow(covid_specific_2), replace = TRUE)
+  nd   <- covid_specific_2[j,]
+  # nd$b <- i
+  pd_NS   <- rbind(pd_NS, nd)
+  
+  if(i%%500==0) {   # Progress tracker
+    cat(i, "\n")       
+    flush.console()
+  }
+  
+}
+
+ggplot(pd_NS, mapping = aes(x=date, y=count_N)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  labs(title = "Count_N BA.2B bs2000")
+  
+
+ggplot(pd_NS, mapping = aes(x=date, y=count_S)) + 
+  geom_point() + 
+  geom_smooth(method = "lm")+
+  labs(title = "Count_S BA.2B bs2000")
+
+fitted_N <- lm(data = pd_NS, count_N ~ date)
+
+######### Linear Regression on S
+fitted_S <- lm(data = pd_NS, count_S ~ date)
+
+fitted_N[["coefficients"]][2] / fitted_S[["coefficients"]][2]
+```
+
+```{r}
+
+ggplot(covid_specific_1, aes(x = date, y = count_S, col = pangolin_lineage)) +
+  geom_point() +
+  labs(title = "count_N BA.2A and BA.2B")
+```
+
+
+Date -> numeric
+```{r}
+date <- as.numeric(covid_specific_1$date)
+covid_specific_1$date <- date
+
+
+r <- rep(NA,10000)
+
+for (i in 1:length(r)) {
+  j    <- sample(1:nrow(covid_specific_1), replace = TRUE)
+  r[i] <- cor(covid_specific_1$date[j], covid_specific_1$count_N[j], method = "pearson")
+  if(i%%500==0) {
+    cat(i, "\n")
+    flush.console()
+  }
+}
+
+pd <- tibble(i=1:length(r), value=r)
+
+ggplot(data = pd, mapping = aes(x=value)) + 
+  geom_histogram(bins = 100) +
+  labs(title = "Cor Coef Count_N XBB bs10000") +
+  NULL
+```
+>Calculate the 95% bootstrapped confidence interval by getting the 2.5% and 97.5% percentile of the bootstrapped correlation coefficients
+
+```{r}
+quantile(x = r, probs = c(0.025, 0.975))
+pd %>% 
+  summarise(q_low  = quantile(value, probs = 0.025),
+            q_high = quantile(value, probs = 0.975))
+```
+
+>Q: Compare it with the output of cor.test
+
+```{r}
+cor.test(covid_specific_1$date, covid_specific_1$count_N)
+```
+
+> By using QQ plot
+
+```{r}
+library(viridis)
+# library(qqplotr)
+ggplot(data = pd, aes(sample=value)) +
+  # stat_qq_band(bandType = "boot", mapping = aes(fill = "Bootstrap"), alpha = 0.9) +
+  #   stat_qq_line() +
+  #   stat_qq_point() +
+  # stat_qq_band(bandType = "ks", mapping = aes(fill = "KS"), alpha = 0.5) + ########### qqplotr has some bugs
+  stat_qq(shape=21,fill="gray",size=4,colour="black",stroke=.5) +
+  stat_qq_line(color="red") +
+    labs(x = "Theoretical Quantiles", y = "Sample Quantiles", title = "QQ plot XBB") +
+    scale_fill_viridis(discrete = T,direction = -1)
+```
+
+## hist of dnds
+```{r}
+
+
+tab <- c(1.184383, 0.4835135, 0.6762425, 0.3400288, 4.130618, 1.10106, 0.6724922, 1.566315, -13.42258 
+) 
+var <- c("BA.1",	"BA.2", "BA.2A", "BA.2B",	"BA.2.75" ,"BA.5"	,"BF.7","BQ.1.1", "XBB")
+tb <- data.frame(var,tab)
+tb$var <- factor(tb$var,levels = c("BA.1",	"BA.2", "BA.2A", "BA.2B",	"BA.2.75","BA.5"	,"BF.7","BQ.1.1", "XBB"))
+# plot(tb, main = bquote('rdNdS'))
+
+tb$col<- ifelse(tb$tab >= 1, 1, 0)
+tb$col<-as.factor(tb$col)
+
+
+ggplot(tb,mapping = aes(x = tb$var, y = tb$tab, col = tb$col, fill = tb$col)) +
+  geom_bar(position="dodge",stat="identity") +
+  labs(title = "dnds_new: kn/ks Bootstrapping") 
 ```
 
