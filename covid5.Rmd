@@ -229,16 +229,15 @@ ggplot(data = covid_specific_2, mapping = aes(x = date, y = count_S)) +
 bootstrap of count_N and count_S   
 pd_N pd_S   
 ```{r}
-
 # library(boot)
 set.seed(1234)
 
-covid_specific_1 <- covid_specific[covid_specific$pangolin_lineage == c("BA.2.75"),]
+covid_specific_1 <- covid_specific[covid_specific$pangolin_lineage == c("BF.7"),]
 covid_specific_1 <- covid_specific_1[,c("date","count_N", "count_S")]
 pd_NS   <- covid_specific_1
 slope_NS <- 0
 # pd$b <- 0
-for (i in 1:100) {
+for (i in 1:500) {
   j    <- sample(1:nrow(covid_specific_1), replace = TRUE)
   nd   <- covid_specific_1[j,]
   fitted_N <- lm(data = nd, count_N ~ date)
@@ -247,12 +246,43 @@ for (i in 1:100) {
   # nd$b <- i
   slope_NS   <- rbind(slope_NS, slope)
   
-  if(i%%10==0) {   # Progress tracker
+  if(i%%100==0) {   # Progress tracker
     cat(i, "\n")       
     flush.console()
   }
   
 }
+slope_NS <- data.frame(slope_NS)
+# hist(slope_NS)
 
-hist(slope_NS)
+## 
+sumstatz <- data.frame(whichstat = c("mean",
+                                     "upp mean+sd", 
+                                     "low mean-sd"),
+                       value     = c(mean(slope_NS$date),
+                                     mean(slope_NS$date)+2*sd(slope_NS$date),
+                                     mean(slope_NS$date)-2*sd(slope_NS$date)))
+
+ggplot(slope_NS, aes(x = date)) +
+  geom_histogram(bins = 30, fill="#69b3a2", color="black", alpha=0.9 , position = "identity") +
+  xlab("dNdS") +
+  geom_vline(data=sumstatz,aes(xintercept = value,
+                               linetype = whichstat,
+                               col = whichstat),size=1) +
+  theme(
+    axis.text.y=element_text(size=12),
+          axis.text.x=element_text(size=12),
+          axis.line = element_line(size=0.6),
+          axis.ticks = element_line(size=0.6),
+          axis.ticks.length = unit(2,'mm'),
+          axis.title = element_text(colour = "black",size=15),
+          panel.background = element_blank()
+  ) +
+  labs(title = "dnds BQ.1.1 boots = 500") +
+  xlim(-5,5)
+
+# mean(slope_NS$date)
+
+t.test(slope_NS$date,conf=0.95)
 ```
+
