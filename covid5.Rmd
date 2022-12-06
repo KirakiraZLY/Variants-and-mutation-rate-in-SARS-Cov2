@@ -231,8 +231,8 @@ pd_N pd_S
 ```{r}
 # library(boot)
 set.seed(1234)
-
-covid_specific_1 <- covid_specific[covid_specific$pangolin_lineage == c("BF.7"),]
+lineage_name <- c("BA.5")
+covid_specific_1 <- covid_specific[covid_specific$pangolin_lineage == lineage_name,]
 covid_specific_1 <- covid_specific_1[,c("date","count_N", "count_S")]
 pd_NS   <- covid_specific_1
 slope_NS <- 0
@@ -253,17 +253,29 @@ for (i in 1:500) {
   
 }
 slope_NS <- data.frame(slope_NS)
+slope_NS$cnt <- round(slope_NS$date,2)
+slope_NS <- slope_NS[slope_NS$cnt > -5,]
+slope_NS <- slope_NS[slope_NS$cnt < 5,]
 # hist(slope_NS)
+calculated <- dnds[dnds$pangolin_lineage == lineage_name,]$dNdS
+calculated <- as.data.frame(calculated)
+colnames(calculated) <- c("dnds")
 
-## 
+## dnds[dnds$pangolin_lineage == lineage_name]$dNdS,]
 sumstatz <- data.frame(whichstat = c("mean",
-                                     "upp mean+sd", 
-                                     "low mean-sd"),
+                                     "calculated",
+                                     "median",
+                                     "low CI",
+                                     "upp CI"),
                        value     = c(mean(slope_NS$date),
-                                     mean(slope_NS$date)+2*sd(slope_NS$date),
-                                     mean(slope_NS$date)-2*sd(slope_NS$date)))
+                                     calculated$dnds,
+                                     median(slope_NS$date),
+                                     mean(slope_NS$date) - 1.96*sd(slope_NS$date),
+                                     mean(slope_NS$date) + 1.96*sd(slope_NS$date) # 95% CI
+                                    )
+                       )
 
-ggplot(slope_NS, aes(x = date)) +
+ggplot(slope_NS, aes(x = cnt)) +
   geom_histogram(bins = 30, fill="#69b3a2", color="black", alpha=0.9 , position = "identity") +
   xlab("dNdS") +
   geom_vline(data=sumstatz,aes(xintercept = value,
@@ -278,11 +290,20 @@ ggplot(slope_NS, aes(x = date)) +
           axis.title = element_text(colour = "black",size=15),
           panel.background = element_blank()
   ) +
-  labs(title = "dnds BQ.1.1 boots = 500") +
-  xlim(-5,5)
+  labs(title = "dnds BA.2 boots = 500") 
 
 # mean(slope_NS$date)
 
-t.test(slope_NS$date,conf=0.95)
+# t.test(slope_NS$date,conf=0.95)
+sumstatz
+```
+
+```{r}
+count <- table(slope_NS$cnt)
+count <- data.frame(count)
+count$Var1 <- as.numeric(as.character(count$Var1))
+count <- count[count$Var1 > -3,]
+count <- count[count$Var1 < 3,]
+
 ```
 
