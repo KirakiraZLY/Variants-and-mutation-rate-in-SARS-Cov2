@@ -231,13 +231,13 @@ pd_N pd_S
 ```{r}
 # library(boot)
 set.seed(1234)
-lineage_name <- c("BA.5")
+lineage_name <- c("Delta")
 covid_specific_1 <- covid_specific[covid_specific$pangolin_lineage == lineage_name,]
 covid_specific_1 <- covid_specific_1[,c("date","count_N", "count_S")]
 pd_NS   <- covid_specific_1
 slope_NS <- 0
 # pd$b <- 0
-for (i in 1:500) {
+for (i in 1:1000) {
   j    <- sample(1:nrow(covid_specific_1), replace = TRUE)
   nd   <- covid_specific_1[j,]
   fitted_N <- lm(data = nd, count_N ~ date)
@@ -262,8 +262,8 @@ calculated <- as.data.frame(calculated)
 colnames(calculated) <- c("dnds")
 
 ## dnds[dnds$pangolin_lineage == lineage_name]$dNdS,]
-sumstatz <- data.frame(whichstat = c("mean",
-                                     "calculated",
+sumstatz <- data.frame(whichstat = c("calculated",
+                                     "mean",
                                      "median",
                                      "low CI",
                                      "upp CI"),
@@ -290,7 +290,7 @@ ggplot(slope_NS, aes(x = cnt)) +
           axis.title = element_text(colour = "black",size=15),
           panel.background = element_blank()
   ) +
-  labs(title = "dnds BA.2 boots = 500") 
+  labs(title = "dnds Delta boots = 1000") 
 
 # mean(slope_NS$date)
 
@@ -305,5 +305,119 @@ count$Var1 <- as.numeric(as.character(count$Var1))
 count <- count[count$Var1 > -3,]
 count <- count[count$Var1 < 3,]
 
+```
+
+BA.2A and BA.2B
+```{r}
+
+covid_specific_1 <- covid_specific[covid_specific$pangolin_lineage == c("BA.2"),]
+covid_specific_1$pangolin_lineage[covid_specific_1$date <= "2022-02-15"] = "BA.2A"
+covid_specific_1$pangolin_lineage[covid_specific_1$date > "2022-02-15"] = "BA.2B"
+
+set.seed(1234)
+
+lineage_name = c("BA.2B")
+
+covid_specific_2 <- covid_specific_1[covid_specific_1$pangolin_lineage == lineage_name,]
+covid_specific_2 <- covid_specific_2[,c("date","count_N","count_S")]
+pd_NS   <- covid_specific_2
+
+
+slope_NS <- 0
+# pd$b <- 0
+for (i in 1:1000) {
+  j    <- sample(1:nrow(covid_specific_2), replace = TRUE)
+  nd   <- covid_specific_1[j,]
+  fitted_N <- lm(data = nd, count_N ~ date)
+  fitted_S <- lm(data = nd, count_S ~ date)
+  slope <- fitted_N[["coefficients"]][2] / fitted_S[["coefficients"]][2]
+  # nd$b <- i
+  slope_NS   <- rbind(slope_NS, slope)
+  
+  if(i%%100==0) {   # Progress tracker
+    cat(i, "\n")       
+    flush.console()
+  }
+  
+}
+slope_NS <- data.frame(slope_NS)
+slope_NS$cnt <- round(slope_NS$date,2)
+slope_NS <- slope_NS[slope_NS$cnt > -5,]
+slope_NS <- slope_NS[slope_NS$cnt < 5,]
+
+fitted_N <- lm(data = pd_NS, count_N ~ date)
+fitted_S <- lm(data = pd_NS, count_S ~ date)
+calculated <- fitted_N[["coefficients"]][2] / fitted_S[["coefficients"]][2]
+
+
+# hist(slope_NS)
+# calculated <- dnds[dnds$pangolin_lineage == lineage_name,]$dNdS
+calculated <- as.data.frame(calculated)
+colnames(calculated) <- c("dnds")
+
+## dnds[dnds$pangolin_lineage == lineage_name]$dNdS,]
+sumstatz <- data.frame(whichstat = c("calculated",
+                                     "mean",
+                                     "median",
+                                     "low CI",
+                                     "upp CI"),
+                       value     = c(calculated$dnds,
+                                     mean(slope_NS$date),
+                                     median(slope_NS$date),
+                                     mean(slope_NS$date) - 1.96*sd(slope_NS$date),
+                                     mean(slope_NS$date) + 1.96*sd(slope_NS$date) # 95% CI
+                                    )
+                       )
+
+ggplot(slope_NS, aes(x = cnt)) +
+  geom_histogram(bins = 30, fill="#69b3a2", color="black", alpha=0.9 , position = "identity") +
+  xlab("dNdS") +
+  geom_vline(data=sumstatz,aes(xintercept = value,
+                               linetype = whichstat,
+                               col = whichstat),size=1) +
+  theme(
+    axis.text.y=element_text(size=12),
+          axis.text.x=element_text(size=12),
+          axis.line = element_line(size=0.6),
+          axis.ticks = element_line(size=0.6),
+          axis.ticks.length = unit(2,'mm'),
+          axis.title = element_text(colour = "black",size=15),
+          panel.background = element_blank()
+  ) +
+  labs(title = "dnds BA.2B boots = 1000") 
+
+# mean(slope_NS$date)
+
+# t.test(slope_NS$date,conf=0.95)
+sumstatz
+
+```
+
+```{r}
+
+
+tab <- c(1.735911,1.573563,0.950299,0.6618234,0.3268897,	3.477736,	0.75600079,	1.14974488,	1.8897538,	0.7565576,	0.1163889) 
+
+tab_mean <- c(1.750376,	1.2267093,	0.4624279,	0.578426,	0.1724709,	2.680127,	0.9340684,	1.45062838,	1.3768097,	0.8358435,	1.1849345)
+
+tab <- tab + tab_mean
+
+var <- c("Delta","BA.1",	"BA.2", "BA.2A", "BA.2B",	"BA.2.75","BA.4" ,"BA.5","BA.5.2.1"	,"BF.7","BQ.1.1", 
+         "Delta","BA.1",	"BA.2", "BA.2A", "BA.2B",	"BA.2.75","BA.4" ,"BA.5","BA.5.2.1"	,"BF.7","BQ.1.1")
+grp <- c("calc","calc","calc","calc","calc","calc","calc","calc","calc","calc","calc",
+         "mean","mean","mean","mean","mean","mean","mean","mean","mean","mean","mean")
+tb <- data.frame(var,tab,grp)
+
+# tb$var <- factor(tb$var,levels = var)
+# plot(tb, main = bquote('rdNdS'))
+
+tb$col<- ifelse(tb$tab >= 1, 1, 0)
+tb$col<-as.factor(tb$col)
+
+
+ggplot(tb,mapping = aes(x = tb$var, y = tb$tab, col = tb$col, fill = tb$col)) +
+  geom_bar(position="dodge",stat="identity") +
+  labs(title = "dnds, calculated and mean after Bootstrapping") +
+  facet_grid(grp~., scales="free_y")
 ```
 
