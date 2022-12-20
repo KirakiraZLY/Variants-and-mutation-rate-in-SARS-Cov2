@@ -25,34 +25,34 @@ covid <- readRDS(filename)
 
 Modify on file
 ```{r}
-
-# covid$country[covid$country == 'Taiwan'] <- 'Taiwan Province of China'
-
-covid$VarShort[covid$Variant == 'VOC Omicron GRA (B.1.1.529+BA.*) first detected in Botswana/Hong Kong/South Africa']  <- 'VOC Omicron GRA'
-covid$VarShort[covid$Variant == 'VOC Alpha GRY (B.1.1.7+Q.*) first detected in the UK']  <- 'VOC Alpha GRY'
-covid$VarShort[covid$Variant == 'VOC Delta GK (B.1.617.2+AY.*) first detected in India']  <- 'VOC Delta GK'
-covid$VarShort[covid$Variant == 'VOC Beta GH/501Y.V2 (B.1.351+B.1.351.2+B.1.351.3) first detected in South Africa']  <- 'VOC Beta GH'
-covid$VarShort[covid$Variant == 'VOI Epsilon GH/452R.V1 (B.1.429+B.1.427) first detected in USA/California']  <- 'VOI Epsilon GH'
-covid$VarShort[covid$Variant == 'VOC Gamma GR/501Y.V3 (P.1+P.1.*) first detected in Brazil/Japan']  <- 'VOC Gamma GR'
-covid$VarShort[covid$Variant == 'VUM GH/490R (B.1.640+B.1.640.*) first detected in Congo/France']  <- 'VUM GH'
-covid$VarShort[covid$Variant == 'VOI Zeta GR/484K.V2 (P.2) first detected in Brazil']  <- 'VOI Zeta GR'
-covid$VarShort[covid$Variant == 'VOI Mu GH (B.1.621+B.1.621.1) first detected in Colombia']  <- 'VOI Mu GH'
-covid$VarShort[covid$Variant == 'VOI Iota GH/253G.V1 (B.1.526) first detected in USA/New York']  <- 'VOI Iota GH'
-covid$VarShort[covid$Variant == 'VOI Kappa G/452R.V3 (B.1.617.1) first detected in India']  <- 'VOI Kappa G'
-covid$VarShort[covid$Variant == 'VOI Lambda GR/452Q.V1 (C.37+C.37.1) first detected in Peru']  <- 'VOI Lambda GR'
-covid$VarShort[covid$Variant == 'VOI Eta G/484K.V3 (B.1.525) first detected in UK/Nigeria']  <- 'VOI Eta G'
-covid$VarShort[covid$Variant == 'VOI Theta GR/1092K.V1 (P.3) first detected in the Philippines']  <- 'VOI Theta GR'
-covid <- filter(covid,covid$n_total != 0)
-# colnames(covid)[names(covid) == 'AA Substitutions'] <- "AASubstitutions" 
-# saveRDS(covid, file = filename)
+# 
+# # covid$country[covid$country == 'Taiwan'] <- 'Taiwan Province of China'
+# 
+# covid$VarShort[covid$Variant == 'VOC Omicron GRA (B.1.1.529+BA.*) first detected in Botswana/Hong Kong/South Africa']  <- 'VOC Omicron GRA'
+# covid$VarShort[covid$Variant == 'VOC Alpha GRY (B.1.1.7+Q.*) first detected in the UK']  <- 'VOC Alpha GRY'
+# covid$VarShort[covid$Variant == 'VOC Delta GK (B.1.617.2+AY.*) first detected in India']  <- 'VOC Delta GK'
+# covid$VarShort[covid$Variant == 'VOC Beta GH/501Y.V2 (B.1.351+B.1.351.2+B.1.351.3) first detected in South Africa']  <- 'VOC Beta GH'
+# covid$VarShort[covid$Variant == 'VOI Epsilon GH/452R.V1 (B.1.429+B.1.427) first detected in USA/California']  <- 'VOI Epsilon GH'
+# covid$VarShort[covid$Variant == 'VOC Gamma GR/501Y.V3 (P.1+P.1.*) first detected in Brazil/Japan']  <- 'VOC Gamma GR'
+# covid$VarShort[covid$Variant == 'VUM GH/490R (B.1.640+B.1.640.*) first detected in Congo/France']  <- 'VUM GH'
+# covid$VarShort[covid$Variant == 'VOI Zeta GR/484K.V2 (P.2) first detected in Brazil']  <- 'VOI Zeta GR'
+# covid$VarShort[covid$Variant == 'VOI Mu GH (B.1.621+B.1.621.1) first detected in Colombia']  <- 'VOI Mu GH'
+# covid$VarShort[covid$Variant == 'VOI Iota GH/253G.V1 (B.1.526) first detected in USA/New York']  <- 'VOI Iota GH'
+# covid$VarShort[covid$Variant == 'VOI Kappa G/452R.V3 (B.1.617.1) first detected in India']  <- 'VOI Kappa G'
+# covid$VarShort[covid$Variant == 'VOI Lambda GR/452Q.V1 (C.37+C.37.1) first detected in Peru']  <- 'VOI Lambda GR'
+# covid$VarShort[covid$Variant == 'VOI Eta G/484K.V3 (B.1.525) first detected in UK/Nigeria']  <- 'VOI Eta G'
+# covid$VarShort[covid$Variant == 'VOI Theta GR/1092K.V1 (P.3) first detected in the Philippines']  <- 'VOI Theta GR'
+# covid <- filter(covid,covid$n_total != 0)
+# # colnames(covid)[names(covid) == 'AA Substitutions'] <- "AASubstitutions" 
+# # saveRDS(covid, file = filename)
 
 
 
 ```
 
 ```{r}
-colnames(covid)[names(covid) == 'AA Substitutions'] <- "AASubstitutions" 
-colnames(covid)[names(covid) == 'GC-Content'] <- "GCContent"
+# colnames(covid)[names(covid) == 'AA Substitutions'] <- "AASubstitutions" 
+# colnames(covid)[names(covid) == 'GC-Content'] <- "GCContent"
 # saveRDS(covid, file = filename)
 ```
 
@@ -64,7 +64,8 @@ set.seed(3373)
 covid_small <- covid[sample(nrow(covid), 10000, replace = FALSE),]
 ggplot(data = covid_small, mapping = aes(x = date, y = n_total/seq_length, col = region)) +
   geom_point() +
-  xlab('date')
+  xlab('date') +
+  labs(title = "dnds, calculated and mean after Bootstrapping")
 
 ```
 
@@ -143,23 +144,23 @@ zly: intraspecific competition?
 6.synonmous based on !annotated
 ```{r}
 
-barplot(table(covid$pangolin_lineage))
+# barplot(table(covid$pangolin_lineage))
 
 ggplot(data = covid, mapping = aes(x = date, y = count_S, col = covid$VarShort)) +
   geom_point() +
   xlab('date') +
   ylim(0,50) +
-  labs(title = "Synonmous")
+  labs(title = "Synonmous accumulation in different variants by date")
 
 ```
 Non-syn
 ```{r}
-barplot(table(covid$pangolin_lineage))
+# barplot(table(covid$pangolin_lineage))
 
 ggplot(data = covid, mapping = aes(x = date, y = count_N, col = covid$VarShort)) +
   geom_point() +
   xlab('date') +
-  labs(title = "Non Synonmous") +
+  labs(title = "Non Synonmous accumulation in different variants by date") +
   ylim(0,100)
 ```
 
